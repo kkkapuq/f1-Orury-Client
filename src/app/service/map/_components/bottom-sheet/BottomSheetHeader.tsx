@@ -1,4 +1,5 @@
 /* eslint-disable import/order */
+
 import Image from 'next/image';
 import useCss from '@/hooks/common/useCss';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
@@ -31,7 +32,7 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
   useCss('https://unpkg.com/react-spring-bottom-sheet/dist/style.css');
 
   const onClickBookmark = () => {
-    console.log('====북마크 클릭, 클릭에따라 api보내야함');
+    // 북마크 클릭, 클릭에따라 api보내야함
   };
 
   const addressSplit = address.split(' ');

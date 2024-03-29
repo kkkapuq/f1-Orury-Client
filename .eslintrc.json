@@ -38,6 +38,9 @@
     "eslint-plugin-import/no-cycle": "off",
     "import/no-cycle":"off",
     "no-param-reassign":"off",
+    "@typescript-eslint/no-unused-vars": "warn", //사용안한 변수는 경고처리
+    "react/jsx-curly-newline": "off", // jsx안에 }를 새로운 라인에 사용할 수 있다.
+    "@typescript-eslint/no-use-before-define": ["warn"], // 선언하기 전에 사용 한다면 경고
     "jsx-a11y/label-has-associated-control": [
       2,
       {

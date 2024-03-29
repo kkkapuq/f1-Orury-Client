@@ -1,7 +1,3 @@
-/* eslint-disable react/jsx-curly-newline */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable lines-around-directive */
-/* eslint-disable react/button-has-type */
 'use client';
 
 import SearchBar from '@/app/service/map/_components/search/SearchBar';
@@ -66,7 +62,6 @@ function Page() {
   };
 
   useEffect(() => {
-    console.log('selectId', typeof selectId, selectId);
     if (selectId && selectId !== 'undefined') {
       const selectItem = data?.data.data.filter(
         v => v.id === Number(selectId),
@@ -86,7 +81,6 @@ function Page() {
   }, []);
 
   useEffect(() => {
-    console.log('===============', mapInfo, mapInfo.center);
     if (typeof location === 'object' && location !== null) {
       // location이 object 이고 null이 아닌지 확인
       setMapInfo({
@@ -104,6 +98,7 @@ function Page() {
       <ImageModal />
       <ImageSliderModal />
       <button
+        type="button"
         className="z-0"
         onClick={() =>
           setMapInfo({

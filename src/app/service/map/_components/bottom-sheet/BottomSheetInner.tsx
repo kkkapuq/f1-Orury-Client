@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Image from 'next/image';
 import OneSiteUrl from '@/app/service/map/_components/bottom-sheet/OneSiteUrl';
 import BarRatingChart from '@/app/service/map/_components/chart/BarRatingChart';

@@ -1,3 +1,5 @@
+/* eslint-disable function-paren-newline */
+
 import { useToast } from '@/app/_components/ui/use-toast';
 import { BottomSheetInnerProps } from '@/types/map/BottomSheetProps';
 import { ChevronDown, Copy } from 'lucide-react';
