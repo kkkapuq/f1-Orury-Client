@@ -41,7 +41,6 @@ function KakaoBackGroundMap({
     lng: location.longitude,
   };
 
-  console.log('mapInfo', mapInfo, mapInfo.center);
   return (
     <div className="h-full-size-omit-nav relative z-10">
       <Map // 지도를 표시할 Container

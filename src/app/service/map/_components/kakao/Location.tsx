@@ -1,24 +1,26 @@
+/* eslint-disable no-console */
 /* eslint-disable lines-around-directive */
 'use client';
 import { useEffect, useState } from 'react';
 
 export default function Location() {
   const [location, setLocation] = useState<
-    { latitude: number; longitude: number } | string
+    { lat: number; lng: number } | string
   >('');
 
   const success = (position: GeolocationPosition) => {
     setLocation({
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
     });
   };
 
   const handleError = () => {
     setLocation({
-      latitude: 37.483034,
-      longitude: 126.902435,
+      lat: 37.483034,
+      lng: 126.902435,
     });
+    console.log('Failed to retrieve location');
   };
 
   useEffect(() => {
