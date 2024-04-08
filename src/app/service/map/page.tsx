@@ -117,14 +117,12 @@ function Page() {
       <SearchBar
         isSearching={isSearching}
         onSearchingFocus={() => setIsSearching(true)}
-      />
-      <SearchResultModal
         searchResult={isEmptyData ? [] : data.data.data}
-        isSearching={isSearching}
         searchLoading={isLoading}
         onSearchingBlur={() => setIsSearching(false)}
         handleMovePosition={handleMovePosition}
       />
+
       {selectId && (
         <BottomSheetContainer
           selectId={selectId}

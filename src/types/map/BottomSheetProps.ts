@@ -22,6 +22,11 @@ export interface BottomSheetInnerProps {
 export interface SearchKeyWordProps {
   isSearching: boolean;
   onSearchingFocus: () => void;
+
+  onSearchingBlur: () => void;
+  handleMovePosition: (item: OneSearchKeywordType) => void;
+  searchResult: OneSearchKeywordType[];
+  searchLoading: boolean;
 }
 
 export interface KakaoBackGroundMapProps {
