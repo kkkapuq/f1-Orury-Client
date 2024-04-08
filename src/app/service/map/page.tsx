@@ -97,7 +97,7 @@ function Page() {
       <ReviewModalContainer isMyPage={false} openPosition="right" />
       <ImageModal />
       <ImageSliderModal />
-      <button
+      {/* <button
         type="button"
         className="z-0"
         onClick={() =>
@@ -108,7 +108,7 @@ function Page() {
         }
       >
         중심으로 이동
-      </button>
+      </button> */}
       <KakaoBackGroundMap
         mapInfo={mapInfo}
         positionList={isEmptyData ? [] : data.data.data}
