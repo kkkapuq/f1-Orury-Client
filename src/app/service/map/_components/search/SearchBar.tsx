@@ -1,23 +1,18 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable import/order */
 /* eslint-disable function-paren-newline */
 import type {
   SearchKeyWordProps,
   SearchResultProps,
 } from '@/types/map/BottomSheetProps';
-import {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { ChangeEvent, FormEvent, useCallback, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import clsx from 'clsx';
 import { COLOR } from '@/styles/color';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SearchResultModal from './SearchResultModal';
 import { OneSearchKeywordType } from '@/types/map/map';
+import useMap from '@/apis/map/hooks/useMap';
 
 /**
  * @description 검색을 하기 위한 컴포넌트
@@ -25,39 +20,44 @@ import { OneSearchKeywordType } from '@/types/map/map';
  * @param setIsSearching 검색 상태를 관리합니다.
  */
 function SearchBar({
+  mapInfo,
   isSearching,
   onSearchingFocus,
-  searchLoading,
   onSearchingBlur,
   handleMovePosition,
-  searchResult,
 }: SearchKeyWordProps) {
   const [searchName, setSearchName] = useState('');
-  const [filteredResult, setFilteredResult] = useState<OneSearchKeywordType[]>(
-    [],
-  );
 
   const searchRef = useRef<HTMLInputElement>(null);
   const keyword = useSearchParams().get('keyword') ?? '';
   const router = useRouter();
+  const [searchResults, setSearchResults] = useState<
+    OneSearchKeywordType[] | undefined
+  >(undefined);
+
+  const { isLoading, data: mapSearchGymListResponse } = useMap.useGetSearchList(
+    mapInfo.center,
+    searchName,
+  );
 
   const handleSearchFocus = () => {
     onSearchingFocus();
   };
 
-  const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSearchSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       searchKeyword: {
         value: string;
       };
     };
-
+    // 검색 할때만 useState변경
+    setSearchResults(mapSearchGymListResponse?.data.data);
     router.push(`?keyword=${target.searchKeyword.value}`);
   };
 
   const containerClassName = clsx(
-    'z-20 h-8 absolute left-1/2 translate-x-[-50%] duration-500',
+    'z-10 h-8 absolute left-1/2 translate-x-[-50%] duration-500',
     { 'top-0 w-full': isSearching },
     { 'top-2 w-[94%]': !isSearching },
   );
@@ -70,13 +70,6 @@ function SearchBar({
   const onChangeInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setSearchName(e.currentTarget.value);
   }, []);
-
-  useEffect(() => {
-    const newFilteredResult = searchResult.filter(item =>
-      item.name.includes(searchName),
-    );
-    setFilteredResult(newFilteredResult);
-  }, [searchResult, searchName]);
 
   return (
     <>
@@ -103,9 +96,9 @@ function SearchBar({
         </form>
       </div>
       <SearchResultModal
-        searchResult={searchName ? filteredResult : searchResult}
+        searchResult={searchName ? searchResults : undefined}
         isSearching={isSearching}
-        searchLoading={searchLoading}
+        searchLoading={isLoading}
         onSearchingBlur={onSearchingBlur}
         handleMovePosition={handleMovePosition}
       />

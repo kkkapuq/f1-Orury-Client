@@ -1,47 +1,34 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import SearchBar from '@/app/service/map/_components/search/SearchBar';
 import BottomSheetContainer from '@/app/service/map/_components/bottom-sheet/BottomSheetContainer';
-import SearchResultModal from '@/app/service/map/_components/search/SearchResultModal';
 import KakaoBackGroundMap from '@/app/service/map/_components/kakao/KakaoBackGroundMap';
 import ImageSliderModal from '@/app/_components/modal/ImageSliderModal';
 import ImageModal from '@/app/_components/modal/ImageModal';
 import type { MapMoveControlType, OneSearchKeywordType } from '@/types/map/map';
-import { useEffect, useState } from 'react';
-import { DEFAULT_POSITION } from '@/constants/map';
-import { useRouter, useSearchParams } from 'next/navigation';
 import useReviewStore from '@/store/review/reviewStore';
-import { useImageStore, useImagesStore } from '@/store/modal/imageModalStore';
-import useMap from '@/apis/map/hooks/useMap';
+import Image from 'next/image';
+import goCurLocation from '$/images/goCurLocation.png';
 import ReviewModalContainer from '../../_components/review/review-modal/ReviewModalContainer';
-import Locations from './_components/kakao/Locations';
+import Location from './_components/kakao/Location';
 
 function Page() {
   const router = useRouter();
   const { reset } = useReviewStore(state => state);
   const keyword = useSearchParams().get('keyword') ?? '';
   const selectId = useSearchParams().get('selectId') ?? '';
-  const location: any = Locations(); // 처음 현재 내위치 latitude, longitude
+  const location: any = Location(); // 처음 현재 내위치 lat, lng
   // 맵상에서 선택된 지도가 있는지 판단하는 state
   const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
   // 검색중인지 판단하는 state
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  // mapInfo를 상태관리로 빼야할듯?
   const [mapInfo, setMapInfo] = useState<MapMoveControlType>({
-    center: { lat: 0, lng: 0 }, // Default center
+    center: { lat: 37.4991618, lng: 127.0281867 }, // Default center
     isPanto: false, // 현재 지도의 좌표와 이동시 부드럽게 움직이는지 여부를 나타냅니다.
   });
-
-  // // 첫 화면으로 검색창에 default 값으로 들어간다.
-  const { isLoading, data } = useMap.useGetSearchList(mapInfo.center, keyword);
-
-  const handleImageClosed = useImageStore(state => state.setModalClose);
-  const handleCarouselClosed = useImagesStore(state => state.setModalClose);
-
-  useEffect(() => {
-    if (isSearching && isSheetOpen) {
-      setIsSheetOpen(false);
-    }
-  }, [isSearching]);
 
   // 좌표를 이동 시키고 열어주는 함수
   const handleMovePosition = (item: OneSearchKeywordType) => {
@@ -62,67 +49,47 @@ function Page() {
   };
 
   useEffect(() => {
-    if (selectId && selectId !== 'undefined') {
-      const selectItem = data?.data.data.filter(
-        v => v.id === Number(selectId),
-      )[0];
-
-      if (selectItem) {
-        // 목록을 선택했을때 위도 경도
-        handleMovePosition(selectItem);
-      }
-    }
-
-    return () => {
-      handleImageClosed();
-      handleCarouselClosed();
-      reset();
-    };
-  }, []);
+    if (isSearching && isSheetOpen) setIsSheetOpen(false);
+  }, [isSearching]);
 
   useEffect(() => {
     if (typeof location === 'object' && location !== null) {
       // location이 object 이고 null이 아닌지 확인
       setMapInfo({
-        center: { lat: location.latitude, lng: location.longitude },
+        center: location,
         isPanto: false,
       });
     }
   }, [location]);
-
-  const isEmptyData = !data || isLoading;
 
   return (
     <div className="h-full relative">
       <ReviewModalContainer isMyPage={false} openPosition="right" />
       <ImageModal />
       <ImageSliderModal />
-      {/* <button
-        type="button"
-        className="z-0"
-        onClick={() =>
-          setMapInfo({
-            center: { lat: location.latitude, lng: location.longitude },
-            isPanto: false,
-          })
-        }
-      >
-        중심으로 이동
-      </button> */}
       <KakaoBackGroundMap
         mapInfo={mapInfo}
-        positionList={isEmptyData ? [] : data.data.data}
         handleMovePosition={handleMovePosition}
       />
       <SearchBar
+        mapInfo={mapInfo}
         isSearching={isSearching}
         onSearchingFocus={() => setIsSearching(true)}
-        searchResult={isEmptyData ? [] : data.data.data}
-        searchLoading={isLoading}
         onSearchingBlur={() => setIsSearching(false)}
         handleMovePosition={handleMovePosition}
       />
-
+      <button
+        type="button"
+        className="z-20 absolute top-[88%] right-2 w-[45px] h-[45px] p-3 rounded-full bg-[#855AFF]"
+        onClick={() => {
+          setMapInfo({
+            center: { lat: mapInfo.center.lat, lng: mapInfo.center.lng },
+            isPanto: true,
+          });
+        }}
+      >
+        <Image src={goCurLocation} alt="goCurLocation" width={22} height={22} />
+      </button>
       {selectId && (
         <BottomSheetContainer
           selectId={selectId}

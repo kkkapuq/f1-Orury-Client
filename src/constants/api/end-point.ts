@@ -1,4 +1,23 @@
-import { CenterType } from '@/types/map/map';
+import { AreaGridType, LatLonType } from '@/types/map/map';
+
+// 공통으로 사용되는 URLSearchParams를 생성하는 함수
+const commonGymURL = (
+  position: LatLonType,
+  areaGrid?: AreaGridType,
+): URLSearchParams => {
+  const url = new URLSearchParams();
+  url.append('latitude', String(position.lat));
+  url.append('longitude', String(position.lng));
+
+  // areaGrid가 전달되었을 경우에만 각 속성 추가
+  if (areaGrid) {
+    Object.entries(areaGrid).forEach(([key, value]) => {
+      url.append(`${key}`, String(value));
+    });
+  }
+
+  return url;
+};
 
 export const END_POINT = {
   auth: {
@@ -144,16 +163,15 @@ export const END_POINT = {
     // DEFAULT
     default: '/gyms',
     // GET
-    searchList: (position: CenterType, keyword: string) => {
-      const url = new URLSearchParams();
-
-      const { lat, lng } = position;
-
+    searchList: (position: LatLonType, keyword: string) => {
+      const url = commonGymURL(position);
       url.append('search_word', keyword);
-      url.append('latitude', String(lat));
-      url.append('longitude', String(lng));
-
       return `${END_POINT.gymController.default}/search?${url.toString()}`;
+    },
+    // 주변 암장 GET
+    aroundGymList: (position: LatLonType, areaGrid: AreaGridType) => {
+      const url = commonGymURL(position, areaGrid);
+      return `${END_POINT.gymController.default}?${url.toString()}`;
     },
     detail: (detailId: string) =>
       `${END_POINT.gymController.default}/${detailId}`,

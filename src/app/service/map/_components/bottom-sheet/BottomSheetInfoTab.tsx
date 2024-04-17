@@ -2,7 +2,8 @@
 
 import { useToast } from '@/app/_components/ui/use-toast';
 import { BottomSheetInnerProps } from '@/types/map/BottomSheetProps';
-import { ChevronDown, Copy } from 'lucide-react';
+import { ChevronDown, ChevronUp, Copy } from 'lucide-react';
+import { useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
 export default function BottomSheetInfoTab({ data }: BottomSheetInnerProps) {
@@ -43,46 +44,59 @@ export default function BottomSheetInfoTab({ data }: BottomSheetInnerProps) {
       });
     });
   };
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div>
-      <main className="h-fit" style={{ border: '2px solid red' }}>
+      <main className="h-fit">
         <section className=" gap-[0.75rem] my-5">
+          {/* 운영 시간 */}
           <div className="flex">
-            <span className="rounded px-1 gap-8px bg-[#B79DFF] text-[#ffff] mr-1">
+            <span
+              className={`rounded px-1 gap-8px text-[#ffff] ${doing_business ? 'bg-[#B79DFF]' : 'bg-[#C3C6CC]'} mr-1`}
+            >
               {doing_business ? '영업중' : '영업 종료'}
             </span>
+
             <div className="text-gray-900 font-semibold text-base">
               운영 시간
             </div>
           </div>
 
           <div className="my-2">
-            <div>{`[${Object.keys(filteredBusinessHours[0])}] ${Object.values(filteredBusinessHours[0])}`}</div>
+            <div className="flex items-center">
+              <div>{`[${Object.keys(filteredBusinessHours[0])}] ${Object.values(filteredBusinessHours[0])}`}</div>
+              <summary
+                className="list-none ml-2 p-1"
+                onClick={() => setIsOpen(!isOpen)}
+                aria-expanded={isOpen ? 'true' : 'false'}
+              >
+                {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </summary>
+            </div>
             <ul>
-              <details className="cursor-pointer">
-                <summary className="list-none">
-                  <ChevronDown size={14} />
-                </summary>
-                {business_hours.map(business_hour =>
-                  Object.entries(business_hour).map(([day, time]) => (
-                    <div key={day}>{`[${day}] ${time}`}</div>
-                  )),
-                )}
-                {setting_day && (
-                  <div className="text-[0.875rem]">
-                    {`[Setting Day] ${setting_day}`}
-                  </div>
-                )}
-              </details>
+              {isOpen && (
+                <div>
+                  {business_hours.map(business_hour =>
+                    Object.entries(business_hour).map(([day, time]) => (
+                      <div key={day}>{`[${day}] ${time}`}</div>
+                    )),
+                  )}
+                  {setting_day && <div>{`[Setting Day] ${setting_day}`}</div>}
+                </div>
+              )}
             </ul>
           </div>
         </section>
+        {/* 회색 줄 */}
         <div className="shadow-custom-line h-[1px] py-1" />
+        {/* 센터 정보 */}
         <section className="my-5">
           <div className="text-gray-900 font-semibold text-base">센터 정보</div>
         </section>
+        {/* 회색 줄 */}
         <div className="shadow-custom-line h-[1px] py-1" />
+        {/* 위치 */}
         <section className="my-5">
           <div className="text-gray-900 font-semibold text-base">위치</div>
           <Map
@@ -102,10 +116,10 @@ export default function BottomSheetInfoTab({ data }: BottomSheetInnerProps) {
           <button
             type="button"
             onClick={copyAdd}
-            className="flex justify-center align-center w-[100px] h-[37px] px-6px pt-16px pb-12px gap-4px rounded-lg border border-solid border-[#E5E7EB]"
+            className="flex items-center justify-center w-[100px] h-[37px] px-6px rounded-lg border border-solid border-[#E5E7EB] font-semibold mt-5"
           >
-            <Copy size={14} />
-            주소복사
+            <Copy size={14} className="mr-1" />
+            <span>주소복사</span>
           </button>
         </section>
       </main>

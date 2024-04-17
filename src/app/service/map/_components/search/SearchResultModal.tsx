@@ -5,7 +5,10 @@ import type { SearchResultProps } from '@/types/map/BottomSheetProps';
 import { Map } from 'lucide-react';
 import { COLOR } from '@/styles/color';
 import { cn } from '@/lib/utils';
-import SearchSkeletonList from '../skeleton/SearchSkeletonList';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import noSerch from '$/images/noSerch.png';
+import noResult from '$/images/noResult.png';
 
 /**
  * @description 해당 Modal은 검색의 결과를 나타내기 위한 Modal입니다.
@@ -17,12 +20,14 @@ import SearchSkeletonList from '../skeleton/SearchSkeletonList';
  */
 function SearchResultModal({
   isSearching,
-  searchLoading,
   onSearchingBlur,
   handleMovePosition,
   searchResult,
 }: SearchResultProps) {
+  const router = useRouter();
   const handleSearchModalClose = () => {
+    // router.push(' ');
+    // router 일단은 보류 --------------------
     onSearchingBlur();
   };
 
@@ -45,22 +50,36 @@ function SearchResultModal({
           <Map size={20} stroke={COLOR.primary} />
         </button>
       </div>
-      {searchResult?.length === 0 ? (
-        <div className="flex h-full justify-center items-center">
-          검색 결과가 없습니다.
+
+      {searchResult === undefined ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="flex items-center justify-center">
+            <Image src={noSerch} alt="no-serch" width={100} height={100} />
+          </div>
+          <p className="mt-4 text-[#C3C6CC]">암장을 검색하세요.</p>
         </div>
       ) : (
-        <div className="flex flex-col pt-2 mt-2 border-t-[1px] gap-2">
-          {searchLoading || searchResult === undefined ? (
-            <SearchSkeletonList />
+        <div>
+          {searchResult?.length === 0 ? (
+            <div className="flex h-full justify-center items-center">
+              <div className="flex flex-col items-center justify-center">
+                <Image src={noResult} alt="no-serch" width={100} height={100} />
+                <p className="mt-4">검색 결과가 없습니다.</p>
+              </div>
+            </div>
           ) : (
-            searchResult.map(value => (
-              <OneSearchResult
-                key={value.id}
-                item={value}
-                onMovePosition={() => handleMovePosition(value)}
-              />
-            ))
+            <div className="flex flex-col pt-2 mt-2 border-t-[1px] gap-2">
+              {searchResult.map(value => (
+                <OneSearchResult
+                  key={value.id}
+                  item={value}
+                  onMovePosition={() => {
+                    console.log('value', value);
+                    handleMovePosition(value);
+                  }}
+                />
+              ))}
+            </div>
           )}
         </div>
       )}
