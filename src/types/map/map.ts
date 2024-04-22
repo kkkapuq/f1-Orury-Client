@@ -89,12 +89,19 @@ export interface DetailPlaceType extends BusinessHoursType {
   gym_type?: string;
 }
 
-export interface CenterType {
+export interface LatLonType {
   lat: number;
   lng: number;
 }
 
+export interface AreaGridType {
+  bottom_latitude: number;
+  top_latitude: number;
+  left_longitude: number;
+  right_longitude: number;
+}
+
 export interface MapMoveControlType {
-  center: CenterType;
+  center: LatLonType;
   isPanto: boolean;
 }

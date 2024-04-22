@@ -20,8 +20,13 @@ export interface BottomSheetInnerProps {
 }
 
 export interface SearchKeyWordProps {
+  mapInfo: MapMoveControlType;
+
   isSearching: boolean;
   onSearchingFocus: () => void;
+
+  onSearchingBlur: () => void;
+  handleMovePosition: (item: OneSearchKeywordType) => void;
 }
 
 export interface KakaoBackGroundMapProps {

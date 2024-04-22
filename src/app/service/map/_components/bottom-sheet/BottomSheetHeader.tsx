@@ -36,7 +36,8 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
   };
 
   const addressSplit = address.split(' ');
-
+  const handlePhoneClick = () => {};
+  const handleWriteClick = () => {};
   return (
     <>
       {/* 인스타 및 북마크 */}
@@ -77,24 +78,21 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
         <ChevronRight size={24} strokeWidth={1} />
       </section>
 
-      {/* 버튼 */}
-      <section
-        className="flex justify-around h-[36px] mt-10"
-        style={{ border: '1px solid red' }}
-      >
+      {/* 버튼 : onClick이벤트 넣어야함 */}
+      <section className="flex justify-around h-[36px] mt-10">
         <a
-          className="flex justify-center align-center w-[155px] h-[36px] px-6px pt-16px pb-12px gap-4px rounded-lg border border-solid border-[#E5E7EB]"
+          className="flex items-center justify-center w-[155px] h-[36px] px-6px gap-2 rounded-lg border border-solid border-[#E5E7EB]"
           href={phone_number}
         >
           <Phone size={24} strokeWidth={1} fill="black" />
-          전화
+          <span className="ml-2">전화</span>
         </a>
         <button
           type="button"
-          className="flex justify-center align-center w-[155px] h-[36px] px-6px pt-16px pb-12px gap-4px rounded-lg border border-solid border-[#E5E7EB]"
+          className="flex items-center justify-center w-[155px] h-[36px] px-6px gap-2 rounded-lg border border-solid border-[#E5E7EB]"
         >
           <Image src={SquarePen} width="24" height="24" alt="글쓰기" />
-          글쓰기
+          <span className="ml-2">글쓰기</span>
         </button>
       </section>
     </>

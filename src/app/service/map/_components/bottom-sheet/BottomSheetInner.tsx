@@ -75,14 +75,14 @@ function BottomSheetInner({ data }: BottomSheetInnerProps) {
 
   return (
     <>
-      <Image
-        src={images[0]}
-        alt={`${name} 로고이미지`}
-        width={0}
-        height={0}
-        sizes="100vw"
-        className="w-screen h-64"
-      />
+      <div className="relative h-52 w-auto">
+        <Image
+          alt={`${name} 로고이미지`}
+          src={images[0]}
+          layout="fill"
+          objectFit="contain"
+        />
+      </div>
       {/*
       <div className="flex justify-end p-[0.75rem]">
         <button type="button" onClick={onModalOpen}>
