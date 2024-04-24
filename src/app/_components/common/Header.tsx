@@ -9,14 +9,21 @@ import * as M from '@/app/_components/ui/menubars';
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ChevronLeft, MoreVertical, X } from 'lucide-react';
+import { ChevronLeft, MoreVertical, X, Plus } from 'lucide-react';
 import { usePostsState } from '@/store/community/postsStore';
 import { MODAL } from '@/constants/ui/common/modal';
 import { useDebouncedCallback } from 'use-debounce';
 import { useToast } from '@/app/_components/ui/use-toast';
 
 function Header({ ...props }: Partial<HeaderProps>) {
-  const { title, isBack, isExit, isEllipsis, editHandler, exitHandler } = props;
+  const {
+    title,
+    isBack,
+    isExit,
+    isEllipsis,
+    editHandler,
+    routeTo,
+  } = props;
   const { toast } = useToast();
   const { categoryId } = usePostsState();
   const { mutate } = usePostListApi.useGetPostList(categoryId);
@@ -55,7 +62,7 @@ function Header({ ...props }: Partial<HeaderProps>) {
   };
 
   return (
-    <header className="sticky top-0 flex items-center justify-center h-12 bg-white z-10">
+    <header className="sticky top-0 flex items-center justify-center h-12 bg-white z-10 relative">
       <button
         type="button"
         onClick={onBackHandler}
@@ -97,12 +104,25 @@ function Header({ ...props }: Partial<HeaderProps>) {
             )}
           </M.Menubar>
         )}
-        {isExit && (
-          <button type="button" onClick={exitHandler}>
-            <X />
-          </button>
-        )}
       </div>
+      {isExit && (
+        <button
+          type="button"
+          className={buttonClassName(isBack)}
+          onClick={onBackHandler}
+        >
+          <X />
+        </button>
+      )}
+      {routeTo && (
+        <button
+          type="button"
+          className={buttonClassName(isBack)}
+          onClick={() => router.push(routeTo)}
+        >
+          <Plus color="#855AFF" />
+        </button>
+      )}
     </header>
   );
 }

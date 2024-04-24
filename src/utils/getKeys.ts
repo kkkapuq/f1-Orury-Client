@@ -1,8 +1,10 @@
 import { END_POINT } from '@/constants/api/end-point';
-import TABS from '@/constants/community/tabs';
+import TABS_COMMUNITY from '@/constants/community/tabs';
+import { UseSortByStateProps } from '@/store/crew/sortsStore';
 import { TResponse } from '@/types/common/response';
 import { CommentListData } from '@/types/community/comment';
 import { PostListData } from '@/types/community/post';
+import { CrewListData } from '@/types/crew/crewList';
 import { NotificationData } from '@/types/notification';
 import { AxiosResponse } from 'axios';
 
@@ -76,13 +78,13 @@ export const getPostListKey = (
 
   if (
     previousPageData &&
-    categoryId === TABS.hot.id &&
+    categoryId === TABS_COMMUNITY.hot.id &&
     previousPageData.data.data.next_page === -1
   ) {
     return null;
   }
 
-  if (!previousPageData && categoryId === TABS.hot.id) {
+  if (!previousPageData && categoryId === TABS_COMMUNITY.hot.id) {
     return END_POINT.postController.getHotPostList(0);
   }
 
@@ -95,11 +97,78 @@ export const getPostListKey = (
       previousPageData?.data.data.next_page,
     );
   }
-
   return END_POINT.postController.getPostList(
     categoryId,
     previousPageData?.data.data.cursor as number,
   );
+};
+
+export const getCrewListKey = (
+  categoryId: number,
+  pageIndex: number,
+  previousPageData?: AxiosResponse<TResponse<CrewListData>>,
+  selectedOption?: UseSortByStateProps['selectedOption'],
+) => {
+  let endpoint: (pageNumber: number) => string =
+    END_POINT.crewController.getListByRecommend;
+
+  const currentPage = previousPageData?.data.data.number;
+
+  if (
+    previousPageData &&
+    !previousPageData.data.data.first &&
+    previousPageData.data.data.last
+  ) {
+    return null;
+  }
+
+  switch (categoryId) {
+    case 1:
+      if (!previousPageData && selectedOption) {
+        switch (selectedOption.title) {
+          case '추천순':
+            endpoint = END_POINT.crewController.getListByRecommend;
+            break;
+          case '인기순':
+            endpoint = END_POINT.crewController.getListByRank;
+            break;
+          default:
+            endpoint = END_POINT.crewController.getListByRecommend;
+            break;
+        }
+      }
+
+      break;
+
+    case 2:
+      if (selectedOption) {
+        switch (selectedOption.title) {
+          case '참여 중':
+            endpoint = END_POINT.crewController.getMyCrews;
+            break;
+          case '참여 대기중':
+            //api 나오면 변경 
+            endpoint = END_POINT.crewController.getMyCrews
+        }
+      }
+
+      if (!previousPageData && pageIndex === 0) {
+        return endpoint(0);
+      }
+      break;
+
+    default:
+      return END_POINT.crewController.getMyCrews(pageIndex);
+      break;
+  }
+
+  if (endpoint) {
+    if (!previousPageData && pageIndex === 0) {
+      return endpoint(0);
+    }
+
+    return endpoint((currentPage as number) + 1);
+  }
 };
 
 export const getNotificationListKey = (

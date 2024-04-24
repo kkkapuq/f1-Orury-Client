@@ -1,4 +1,4 @@
-const TABS = {
+const TABS_COMMUNITY = {
   hot: {
     title: '인기',
     id: 3,
@@ -13,4 +13,4 @@ const TABS = {
   },
 } as const;
 
-export default TABS;
+export default TABS_COMMUNITY;

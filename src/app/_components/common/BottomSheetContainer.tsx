@@ -1,10 +1,13 @@
 import { useRef } from 'react';
 import useCss from '@/hooks/common/useCss';
 import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet';
-import type { BottonSheetProps } from '@/types/community/bottomSheet';
-import Form from '@/app/_components/common/Form';
+import type { BottomSheetProps } from '@/types/community/bottomSheet';
 
-function BottomSheetContainer({ ...props }: BottonSheetProps) {
+function BottomSheetContainer({
+  ContentComponent,
+  isPost,
+  ...props
+}: BottomSheetProps) {
   useCss('https://unpkg.com/react-spring-bottom-sheet/dist/style.css');
 
   const { bottomSheetTitle, isSheetOpen, setIsSheetOpen, onDisMiss } = props;
@@ -31,7 +34,10 @@ function BottomSheetContainer({ ...props }: BottonSheetProps) {
       onDismiss={onDisMiss}
       expandOnContentDrag={isSheetOpen}
     >
-      <Form setIsSheetOpen={setIsSheetOpen} isPost />
+      <ContentComponent
+        setIsSheetOpen={setIsSheetOpen}
+        {...(isPost && { isPost })}
+      />
     </BottomSheet>
   );
 }

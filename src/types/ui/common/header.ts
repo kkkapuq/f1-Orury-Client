@@ -6,6 +6,7 @@ interface HeaderProps {
   okHandler?: () => void;
   exitHandler?: () => void;
   editHandler?: () => void;
+  routeTo?: string;
 }
 
 export default HeaderProps;

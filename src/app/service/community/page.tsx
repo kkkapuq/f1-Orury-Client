@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import PostList from '@/app/service/community/_components/PostList';
 import SearchBar from '@/app/service/community/_components/SearchBar';
-import Tabs from '@/app/service/community/_components/Tabs';
+import Tabs from '@/app/_components/common/Tabs';
 import Floating from '@/app/_components/buttons/Floating';
 import Header from '@/app/_components/common/Header';
 import HEADER from '@/constants/ui/common/header';
-import BottomSheetContainer from '@/app/service/community/_components/BottomSheetContainer';
+import BottomSheetContainer from '@/app/_components/common/BottomSheetContainer';
 import CommunityModal from '@/app/service/community/_components/CommunityModal';
+import TABS_COMMUNITY from '@/constants/community/tabs';
+import { usePostsState } from '@/store/community/postsStore';
+import Form from '@/app/_components/common/Form';
 
 function Page() {
   const bottomSheetTitle = '게시글 작성';
@@ -38,14 +41,16 @@ function Page() {
         setIsSearchingFocus={setIsSearchingFocus}
         setSearchText={setSearchText}
       />
-      <Tabs />
+      <Tabs tabs={TABS_COMMUNITY} useStateHook={usePostsState} />
       {!isSearchingFocus && <PostList />}
       {isSearchingFocus && <CommunityModal searchText={searchText} />}
       <BottomSheetContainer
+        ContentComponent={Form}
         bottomSheetTitle={bottomSheetTitle}
         isSheetOpen={isSheetOpen}
         setIsSheetOpen={setIsSheetOpen}
         onDisMiss={onDisMiss}
+        isPost
       />
       {!isSearchingFocus && <Floating setIsSheetOpen={setIsSheetOpen} />}
     </div>
