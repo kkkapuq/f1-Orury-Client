@@ -8,7 +8,11 @@ import { ChevronDown, ChevronUp, Copy } from 'lucide-react';
 import { useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
-export default function BottomSheetReviewTab(data: ReviewResponseType) {
+export default function BottomSheetReviewTab({
+  data,
+}: {
+  data: ReviewResponseType;
+}) {
   const { reviews, gym_name, cursor } = data; // 리뷰 데이터
 
   return <div>d</div>;
