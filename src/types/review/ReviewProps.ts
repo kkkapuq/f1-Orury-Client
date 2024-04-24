@@ -60,4 +60,5 @@ export interface ReviewRegisterModalProps {
 
 export interface ReviewModalContainerProps extends OpenPosition {
   isMyPage: boolean;
+  isWrite?: boolean; // 글쓰기관련 boolean
 }

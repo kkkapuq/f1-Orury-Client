@@ -5,7 +5,14 @@ import type {
   SearchKeyWordProps,
   SearchResultProps,
 } from '@/types/map/BottomSheetProps';
-import { ChangeEvent, FormEvent, useCallback, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Search } from 'lucide-react';
 import clsx from 'clsx';
 import { COLOR } from '@/styles/color';
@@ -13,6 +20,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import SearchResultModal from './SearchResultModal';
 import { OneSearchKeywordType } from '@/types/map/map';
 import useMap from '@/apis/map/hooks/useMap';
+import { useAroundGymListStore } from '@/store/map/gymStore';
 
 /**
  * @description 검색을 하기 위한 컴포넌트
@@ -27,7 +35,7 @@ function SearchBar({
   handleMovePosition,
 }: SearchKeyWordProps) {
   const [searchName, setSearchName] = useState('');
-
+  const { mapAroundGymList } = useAroundGymListStore();
   const searchRef = useRef<HTMLInputElement>(null);
   const keyword = useSearchParams().get('keyword') ?? '';
   const router = useRouter();
@@ -71,6 +79,11 @@ function SearchBar({
     setSearchName(e.currentTarget.value);
   }, []);
 
+  // mapAroundGymList가 바뀌면, 검색결과 set시킴
+  useEffect(() => {
+    setSearchResults(mapAroundGymList);
+  }, [mapAroundGymList]);
+
   return (
     <>
       <div className={containerClassName}>
@@ -96,7 +109,9 @@ function SearchBar({
         </form>
       </div>
       <SearchResultModal
-        searchResult={searchName ? searchResults : undefined}
+        searchResult={
+          searchName || mapAroundGymList ? searchResults : undefined
+        }
         isSearching={isSearching}
         searchLoading={isLoading}
         onSearchingBlur={onSearchingBlur}

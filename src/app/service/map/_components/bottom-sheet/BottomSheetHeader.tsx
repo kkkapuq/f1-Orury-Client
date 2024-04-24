@@ -8,6 +8,7 @@ import OneSiteUrl from './OneSiteUrl';
 import { Phone, Star, StarHalf, ChevronRight } from 'lucide-react';
 import SquarePen from 'public/square-pen.svg';
 import { BottomSheetInnerProps } from '@/types/map/BottomSheetProps';
+import useReviewStore from '@/store/review/reviewStore';
 
 function BottomSheetHeader({ data }: BottomSheetInnerProps) {
   const {
@@ -38,6 +39,16 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
   const addressSplit = address.split(' ');
   const handlePhoneClick = () => {};
   const handleWriteClick = () => {};
+
+  const onReview = useReviewStore(state => state.onReview);
+  const { isOpen, reset, setCreateMode, reviewId } = useReviewStore(
+    state => state,
+  );
+
+  const onModalOpen = () => {
+    onReview(id);
+  };
+
   return (
     <>
       {/* 인스타 및 북마크 */}
@@ -90,6 +101,7 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
         <button
           type="button"
           className="flex items-center justify-center w-[155px] h-[36px] px-6px gap-2 rounded-lg border border-solid border-[#E5E7EB]"
+          onClick={onModalOpen}
         >
           <Image src={SquarePen} width="24" height="24" alt="글쓰기" />
           <span className="ml-2">글쓰기</span>

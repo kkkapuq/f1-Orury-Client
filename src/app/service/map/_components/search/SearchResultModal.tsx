@@ -62,9 +62,18 @@ function SearchResultModal({
         <div>
           {searchResult?.length === 0 ? (
             <div className="flex h-full justify-center items-center">
-              <div className="flex flex-col items-center justify-center">
-                <Image src={noResult} alt="no-serch" width={100} height={100} />
-                <p className="mt-4">검색 결과가 없습니다.</p>
+              <div className="flex flex-col items-center justify-center ">
+                <Image
+                  src={noResult}
+                  alt="no-result"
+                  width={100}
+                  height={100}
+                />
+                <p className="mt-4 text-center text-[#C3C6CC]">
+                  검색결과 없어요.
+                  <br />
+                  암장 등록 요청을 해주세요.
+                </p>
               </div>
             </div>
           ) : (
