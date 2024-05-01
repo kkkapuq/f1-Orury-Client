@@ -25,8 +25,16 @@ const config: Config = {
     },
     extend: {
       height: {
-        'full-size-omit-nav': 'calc(100vh - 3rem)',
+        'full-size-omit-nav': 'calc(100vh - 4rem)',
       },
+      gradientColorStops: theme => ({
+        'custom-gradient-start': '#B79DFF',
+        'custom-gradient-end': '#855AFF',
+      }),
+      linearGradientDirections: {
+        90: '90deg',
+      },
+
       colors: {
         primary: '#855AFF',
         purple: {

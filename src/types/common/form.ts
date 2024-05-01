@@ -5,7 +5,7 @@ export type FormType = {
   category?: number;
   title?: string;
   content?: string;
-  images?: string[];
+  images?: string[] | null;
   isPost?: boolean;
   isPostDetail?: boolean;
   isReview?: boolean;

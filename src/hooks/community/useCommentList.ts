@@ -16,7 +16,7 @@ const useCommentListApi = {
       },
       axiosInstance.get,
       {
-        revalidateFirstPage: false,
+        revalidateFirstPage: true,
       },
     ),
 };

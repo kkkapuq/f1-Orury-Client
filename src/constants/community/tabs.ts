@@ -1,8 +1,4 @@
 const TABS_COMMUNITY = {
-  hot: {
-    title: '인기',
-    id: 3,
-  },
   main: {
     title: '자유게시판',
     id: 1,
@@ -10,6 +6,10 @@ const TABS_COMMUNITY = {
   qna: {
     title: 'QnA',
     id: 2,
+  },
+  notice: {
+    title: '공지사항',
+    id: 3,
   },
 } as const;
 

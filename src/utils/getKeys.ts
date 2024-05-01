@@ -1,5 +1,6 @@
-import { END_POINT } from '@/constants/api/end-point';
 import TABS_COMMUNITY from '@/constants/community/tabs';
+
+import { END_POINT } from '@/constants/api/end-point';
 import { UseSortByStateProps } from '@/store/crew/sortsStore';
 import { TResponse } from '@/types/common/response';
 import { CommentListData } from '@/types/community/comment';
@@ -78,13 +79,13 @@ export const getPostListKey = (
 
   if (
     previousPageData &&
-    categoryId === TABS_COMMUNITY.hot.id &&
+    categoryId === TABS_COMMUNITY.notice.id &&
     previousPageData.data.data.next_page === -1
   ) {
     return null;
   }
 
-  if (!previousPageData && categoryId === TABS_COMMUNITY.hot.id) {
+  if (!previousPageData && categoryId === TABS_COMMUNITY.notice.id) {
     return END_POINT.postController.getHotPostList(0);
   }
 
@@ -147,8 +148,8 @@ export const getCrewListKey = (
             endpoint = END_POINT.crewController.getMyCrews;
             break;
           case '참여 대기중':
-            //api 나오면 변경 
-            endpoint = END_POINT.crewController.getMyCrews
+            //api 나오면 변경
+            endpoint = END_POINT.crewController.getMyCrews;
         }
       }
 
@@ -159,7 +160,6 @@ export const getCrewListKey = (
 
     default:
       return END_POINT.crewController.getMyCrews(pageIndex);
-      break;
   }
 
   if (endpoint) {

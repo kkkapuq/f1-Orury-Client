@@ -34,7 +34,7 @@ export interface CommentStateProps {
   setIsReplyMode: (value: boolean) => void;
 }
 
-export interface ModifyContentProps {
+export interface ContentProps {
   comment_id: number;
   post_id: number;
   content: string;

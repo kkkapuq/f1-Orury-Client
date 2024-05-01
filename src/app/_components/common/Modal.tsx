@@ -2,15 +2,15 @@ interface ModalProps {
   title: string;
   content: string;
   okContent: string;
-  cancelHandler: () => void;
-  okHandler: () => void;
+  onCancelClick: () => void;
+  onOkClick: () => void;
 }
 
 function Modal({
   title,
   content,
-  cancelHandler,
-  okHandler,
+  onCancelClick,
+  onOkClick,
   okContent,
 }: ModalProps) {
   return (
@@ -60,14 +60,14 @@ function Modal({
             <div className="bg-gray-50 pr-4 py-3 flex flex-row-reverse">
               <button
                 type="button"
-                onClick={okHandler}
+                onClick={onOkClick}
                 className="inline-flex w-auto justify-center rounded-xl bg-warning px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
               >
                 {okContent}
               </button>
               <button
                 type="button"
-                onClick={cancelHandler}
+                onClick={onCancelClick}
                 className="inline-flex w-auto justify-center rounded-xl bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-900 hover:bg-gray-50 mr-3"
               >
                 취소

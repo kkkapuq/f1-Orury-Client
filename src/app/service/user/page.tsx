@@ -59,11 +59,7 @@ function Page() {
   return (
     <div className="relative">
       {category && category !== 'review' && (
-        <Header
-          title={getHeaderTitle(category)}
-          isExit
-          exitHandler={handleExit}
-        />
+        <Header title={getHeaderTitle(category)} isExit onExit={handleExit} />
       )}
       <Profile {...userData} />
       <Privacy

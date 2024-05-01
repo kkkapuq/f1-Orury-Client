@@ -21,7 +21,7 @@ import { Textarea } from '@/app/_components/ui/textarea';
 import { convertURLtoFile } from '@/utils/convertURLtoFile';
 import type { FormType } from '@/types/common/form';
 
-function Form({ ...props }: FormType) {
+function PostForm({ ...props }: FormType) {
   const {
     postId,
     title,
@@ -51,7 +51,7 @@ function Form({ ...props }: FormType) {
     };
 
     convertImagesType();
-  }, []);
+  }, [newImages]);
 
   const form = useForm<FormSchemaType>({
     defaultValues: {
@@ -63,12 +63,16 @@ function Form({ ...props }: FormType) {
   });
 
   const onSubmit = useDebouncedCallback(async (data: FormSchemaType) => {
+    console.log(isPost);
+
     if (isPost && setIsSheetOpen) {
       const formData = getFormData({
         jsonData: JSON.stringify(data),
         images: newImages,
       });
+
       const message = await post(formData);
+      console.log(message);
 
       await mutate();
       setIsSheetOpen(false);
@@ -163,7 +167,7 @@ function Form({ ...props }: FormType) {
                 <F.FormControl>
                   <Textarea
                     placeholder="글 내용"
-                    className="resize-none border-none max-h-96"
+                    className="resize-none max-h-96"
                     defaultValue={content}
                     onKeyUp={e => autoResize(e.target as HTMLTextAreaElement)}
                     onKeyDown={e => autoResize(e.target as HTMLTextAreaElement)}
@@ -174,11 +178,11 @@ function Form({ ...props }: FormType) {
               </F.FormItem>
             )}
           />
+
+          <PhotoBooth images={newImages} setImages={setNewImages} />
         </div>
 
-        <div className="flex flex-col items-end w-full gap-2 pb-4 z-50 bg-white">
-          <PhotoBooth images={newImages} setImages={setNewImages} />
-
+        <div className="flex flex-col w-full gap-2 pb-4 z-50 bg-white">
           <Button type="submit" color="white" className="w-full">
             작성 완료
           </Button>
@@ -188,4 +192,4 @@ function Form({ ...props }: FormType) {
   );
 }
 
-export default Form;
+export default PostForm;

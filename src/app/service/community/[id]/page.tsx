@@ -9,8 +9,9 @@ import Header from '@/app/_components/common/Header';
 import PostDetail from '@/app/service/community/[id]/_components/PostDetail';
 import getPostDetail from '@/app/service/community/[id]/api/getPostDetail';
 import CommentList from '@/app/service/community/[id]/_components/comment/CommentList';
-import Form from '@/app/_components/common/Form';
+import PostForm from '@/app/service/community/_components/PostForm';
 import ImageSliderModal from '@/app/_components/modal/ImageSliderModal';
+import CommentInput from '@/app/service/community/[id]/_components/comment/CommentInput';
 
 function Page({ params }: { params: { id: string } }) {
   const { title, content, setTitle, setContent } = useOnePostState();
@@ -35,31 +36,34 @@ function Page({ params }: { params: { id: string } }) {
   }, [content, postId, setContent, setTitle, title]);
 
   return (
-    <section className="relative h-full-size-omit-nav">
-      <Header
-        title={isEditButtonClicked ? HEADER.edit : HEADER.community}
-        isEllipsis={postDetail?.is_mine && !isEditButtonClicked}
-        isBack={!isEditButtonClicked}
-        isExit={isEditButtonClicked}
-        exitHandler={handleEditMode}
-        editHandler={handleEditMode}
-      />
-      <ImageSliderModal />
-      <div className="flex flex-col  relative h-full-size-omit-nav">
-        {!isEditButtonClicked && postDetail && <PostDetail {...postDetail} />}
-        {!isEditButtonClicked && <CommentList postId={postId} />}
-        {isEditButtonClicked && (
-          <Form
-            postId={postId}
-            category={postDetail?.category}
-            title={postDetail?.title}
-            content={postDetail?.content}
-            images={postDetail?.images}
-            editHandler={handleEditMode}
-            isPostDetail
-          />
-        )}
+    <section className="flex flex-col justify-between relative h-full-size-omit-nav bg-[#F9F9F9]">
+      <div>
+        <Header
+          title={isEditButtonClicked ? HEADER.edit : HEADER.community}
+          isEllipsis={postDetail?.is_mine && !isEditButtonClicked}
+          isBack={!isEditButtonClicked}
+          isExit={isEditButtonClicked}
+          onExit={handleEditMode}
+          onEdit={handleEditMode}
+        />
+        <ImageSliderModal />
+        <div className="flex flex-col relative">
+          {!isEditButtonClicked && postDetail && <PostDetail {...postDetail} />}
+          {!isEditButtonClicked && <CommentList postId={postId} />}
+          {isEditButtonClicked && (
+            <PostForm
+              postId={postId}
+              category={postDetail?.category}
+              title={postDetail?.title}
+              content={postDetail?.content}
+              images={postDetail?.images}
+              editHandler={handleEditMode}
+              isPostDetail
+            />
+          )}
+        </div>
       </div>
+      <CommentInput />
     </section>
   );
 }

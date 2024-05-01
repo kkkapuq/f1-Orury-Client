@@ -19,5 +19,6 @@ export const convertURLtoFile = async (url: string) => {
   const filename = url.split('/').pop();
   const metadata = { type: `image/${ext}` };
   const file = new File([data], filename!, metadata);
+
   return file;
 };

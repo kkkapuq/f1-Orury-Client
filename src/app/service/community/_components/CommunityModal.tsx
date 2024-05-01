@@ -15,14 +15,14 @@ function CommunityModal({ ...props }: CommunityModalProps) {
   });
 
   return (
-    <section className="opacity-100 top-0 translate-y-0 z-9 bg-white pt-28 px-4 pb-4 absolute overflow-y-auto transition-transform duration-300 w-full h-[calc(100vh-3.5rem)]">
+    <section className="opacity-100 top-0 z-9 bg-white pt-12 px-4 pb-4 absolute w-full h-[calc(100vh-3.5rem)]">
       {searchText ? (
         <>
           <ul>{posts?.map(post => <OnePost key={post.id} {...post} />)}</ul>
           <div ref={bottomRef} />
         </>
       ) : (
-        <NotSearched content="검색어를 입력하여 글을 검색해보세요!" />
+        <NotSearched content="글을 검색해보세요" />
       )}
     </section>
   );

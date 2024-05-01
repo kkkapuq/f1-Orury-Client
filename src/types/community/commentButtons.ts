@@ -1,11 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export interface CommentBtnProps {
-  commentId?: number;
+  likes: number;
+  isLike: boolean;
+  commentId: number;
   postId?: number;
   parentId?: number;
-  isLike?: boolean;
+  isClickedLike?: boolean;
   isMine?: boolean;
-  setIsLike: Dispatch<SetStateAction<boolean | undefined>>;
-  setLikes?: Dispatch<SetStateAction<number | undefined>>;
+  setIsClickedLike?: Dispatch<SetStateAction<boolean | undefined>>;
+  setLikes?: Dispatch<SetStateAction<number>>;
 }

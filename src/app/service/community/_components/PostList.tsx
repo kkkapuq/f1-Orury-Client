@@ -28,7 +28,7 @@ function PostList() {
 
   return (
     <div>
-      <ul className="px-4">
+      <ul className="px-4 pt-2">
         {isLoading ? (
           <PostListSkeleton />
         ) : (

@@ -6,18 +6,17 @@ import { usePathname } from 'next/navigation';
 import NAVBAR from '@/constants/ui/common/navbar';
 import NavbarProps from '@/types/ui/common/navbar';
 import {
-  Home,
   Map,
   MessageSquareText,
   UserRound,
-  UsersRound,
+  HeartHandshake,
 } from 'lucide-react';
 import { COLOR } from '@/styles/color';
 
 function Navbar() {
   const pathname = usePathname();
   const HOME = '/service';
-  const { grey300, white, primary } = COLOR;
+  const { grey300, primary } = COLOR;
 
   const getInActiveIcon = (text: string) => {
     switch (text) {
@@ -25,10 +24,8 @@ function Navbar() {
         return <Map color={grey300} strokeWidth={2} />;
       case '커뮤니티':
         return <MessageSquareText color={grey300} strokeWidth={2} />;
-      case '홈':
-        return <Home color={grey300} strokeWidth={2} />;
       case '크루':
-        return <UsersRound color={grey300} strokeWidth={2} />;
+        return <HeartHandshake color={grey300} strokeWidth={2} />;
       default:
         return <UserRound color={grey300} strokeWidth={2} />;
     }
@@ -37,28 +34,18 @@ function Navbar() {
   const getActiveIcon = (text: string) => {
     switch (text) {
       case '지도':
-        return <Map color={white} strokeWidth={1} fill={primary} />;
+        return <Map color={primary} strokeWidth={2} />;
       case '커뮤니티':
-        return (
-          <MessageSquareText stroke={white} strokeWidth={1} fill={primary} />
-        );
-      case '홈':
-        return <Home color={white} strokeWidth={1} fill={primary} />;
+        return <MessageSquareText stroke={primary} strokeWidth={2} />;
       case '크루':
-        return <UsersRound color={primary} strokeWidth={2} fill={primary} />;
+        return <HeartHandshake color={primary} strokeWidth={2} />;
       default:
-        return <UserRound color={primary} strokeWidth={2} fill={primary} />;
+        return <UserRound color={primary} strokeWidth={2} />;
     }
   };
 
   const renderIcons = ({ value }: { value: NavbarProps }) => {
-    if (pathname === HOME && value.href === HOME) {
-      return <Home color="#F8F8F8" strokeWidth={2} fill={primary} />;
-    }
-
-    if (value.href !== HOME) {
-      if (pathname.startsWith(value.href)) return getActiveIcon(value.text);
-    }
+    if (pathname.startsWith(value.href)) return getActiveIcon(value.text);
 
     return getInActiveIcon(value.text);
   };

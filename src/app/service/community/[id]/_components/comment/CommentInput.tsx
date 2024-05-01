@@ -7,7 +7,7 @@ import * as F from '@/app/_components/ui/form';
 
 import { useEffect, useRef } from 'react';
 import { Textarea } from '@/app/_components/ui/textarea';
-import { ArrowUpCircle } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { COLOR } from '@/styles/color';
@@ -68,17 +68,17 @@ function CommentInput() {
   }, [form.watch('content')]);
 
   return (
-    <section className="sticky bottom-12 left-0">
+    <section className="sticky bottom-14 left-0 mx-4">
       <F.Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <F.FormField
             control={form.control}
             name="content"
             render={({ field: { onBlur, ref, ...field } }) => (
-              <F.FormItem className="space-y-3">
+              <F.FormItem>
                 <F.FormControl>
                   <Textarea
-                    className="resize-none w-full py-3 pl-4 pr-10 rounded-2xl outline-none bg-grey-50 placeholder:text-grey-500 caret-primary border-2 border-grey-100 focus:border-2 focus:border-primary"
+                    className="resize-none w-full py-[10px] pl-4 pr-10 rounded-xl outline-none bg-gradient-to-r from-gray-100 to-gray-100 placeholder:text-grey-300 caret-primary border-2 border-grey-100 focus:border-2 focus:border-primary"
                     placeholder="댓글을 입력하세요."
                     onKeyUp={e => autoResize(e.target as HTMLTextAreaElement)}
                     onKeyDown={e => autoResize(e.target as HTMLTextAreaElement)}
@@ -94,9 +94,9 @@ function CommentInput() {
           />
           <button
             type="submit"
-            className="absolute right-3.5 bottom-3 cursor-pointer"
+            className="absolute right-4 bottom-2 cursor-pointer"
           >
-            <ArrowUpCircle size={28} color={COLOR.primary} />
+            <Send size={24} color={COLOR.black} />
           </button>
         </form>
       </F.Form>
