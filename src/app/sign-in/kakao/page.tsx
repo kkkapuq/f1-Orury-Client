@@ -43,10 +43,20 @@ function Page() {
         case STATUS_CODE.ok:
           router.push(service + map);
           setId(response.data.id);
+          toast({
+            variant: 'default',
+            description: response?.message || SIGN_UP_ERROR_MESSAGES.default,
+            duration: 2000,
+          });
           break;
 
         case invalidEmail:
           router.push(home);
+          toast({
+            variant: 'default',
+            description: response?.message || SIGN_UP_ERROR_MESSAGES.default,
+            duration: 2000,
+          });
           break;
 
         case noAccount:
@@ -68,18 +78,17 @@ function Page() {
 
         case haveAnotherAccount:
           router.push(home);
+          toast({
+            variant: 'default',
+            description: response?.message || SIGN_UP_ERROR_MESSAGES.default,
+            duration: 2000,
+          });
           break;
 
         default:
           router.push(home);
           break;
       }
-
-      toast({
-        variant: 'default',
-        description: response?.message || SIGN_UP_ERROR_MESSAGES.default,
-        duration: 2000,
-      });
     };
 
     signIn();

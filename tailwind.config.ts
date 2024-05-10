@@ -60,6 +60,7 @@ const config: Config = {
           800: '#243545',
           900: '#162637',
         },
+        red: '#FF5247',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -90,9 +91,8 @@ const config: Config = {
           foreground: 'hsl(var(--card-foreground))',
         },
         green: '#6BCB77',
-        red: '#FF006B',
         kakao: '#FEE500',
-        disabled: '#96A2AC',
+        disabled: '#D3D5D9',
         warning: '#DA0000',
       },
       boxShadow: {

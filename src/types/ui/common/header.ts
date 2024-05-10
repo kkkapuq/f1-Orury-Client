@@ -8,6 +8,7 @@ interface HeaderProps {
   onExit?: () => void;
   onEdit?: () => void;
   onSearch?: () => void;
+  onBack?: () => void;
   routeTo?: string;
 }
 

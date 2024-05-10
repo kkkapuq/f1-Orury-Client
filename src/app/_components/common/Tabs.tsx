@@ -1,11 +1,10 @@
 'use client';
 
 import clsx from 'clsx';
-import TABS from '@/constants/community/tabs';
-import { usePostsState } from '@/store/community/postsStore';
+import { TabsProps } from '@/types/common/tabs';
 
-function Tabs() {
-  const { categoryId, setCategoryId } = usePostsState();
+function Tabs({ tabs, useStateHook }: TabsProps) {
+  const { categoryId, setCategoryId } = useStateHook();
 
   const liClassName = (id: number) => {
     return clsx('flex rounded-xl transition duration-500 ease-in-out', {
@@ -25,7 +24,7 @@ function Tabs() {
 
   return (
     <ul className="grid grid-cols-3 h-10 mx-4 bg-grey-100 rounded-xl">
-      {Object.values(TABS).map(tab => (
+      {Object.values(tabs).map(tab => (
         <li key={tab.title} className={liClassName(tab.id)}>
           <button
             type="button"

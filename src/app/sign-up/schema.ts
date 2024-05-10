@@ -15,6 +15,10 @@ export const formSchema = z.object({
       message: INVALID_MESSAGE.nickname,
     })
     .transform(value => value.trim()),
+  regions: z
+    .array(z.string())
+    .min(1, '최소 1개 이상의 지역을 선택해주세요.')
+    .max(3, '최대 3개까지 지역을 선택할 수 있습니다.'),
 });
 
 export type FormSchemaType = z.infer<typeof formSchema>;

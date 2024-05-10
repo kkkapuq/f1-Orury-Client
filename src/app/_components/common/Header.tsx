@@ -19,7 +19,6 @@ import {
   Plus,
 } from 'lucide-react';
 import { usePostsState } from '@/store/community/postsStore';
-import { MODAL } from '@/constants/ui/common/modal';
 import { useDebouncedCallback } from 'use-debounce';
 import { useToast } from '@/app/_components/ui/use-toast';
 import { COLOR } from '@/styles/color';
@@ -34,6 +33,7 @@ function Header({ ...props }: Partial<HeaderProps>) {
     onEdit,
     onExit,
     onSearch,
+    onBack,
     routeTo,
   } = props;
   const { toast } = useToast();
@@ -77,7 +77,7 @@ function Header({ ...props }: Partial<HeaderProps>) {
     <header className="sticky top-0 flex items-center justify-center h-12 bg-white z-10 relative">
       <button
         type="button"
-        onClick={onBackHandler}
+        onClick={onBack || onBackHandler}
         className={buttonClassName(isBack)}
       >
         {isBack && <ChevronLeft />}

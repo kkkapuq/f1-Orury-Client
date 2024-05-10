@@ -4,7 +4,7 @@ import { TosProps } from '@/types/sign-up';
 
 function TosSummary({ handleOpenModal }: TosProps) {
   return (
-    <div className="text-center text-xs sm:text-sm leading-5">
+    <div className="text-center text-xs sm:text-sm leading-5 pt-4">
       <span>회원 가입 버튼을 누르면 </span>
       <button type="button" onClick={handleOpenModal} className="underline">
         이용 약관 및 개인정보 수집 및 이용

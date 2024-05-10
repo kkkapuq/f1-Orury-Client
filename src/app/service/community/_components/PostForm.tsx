@@ -63,8 +63,6 @@ function PostForm({ ...props }: FormType) {
   });
 
   const onSubmit = useDebouncedCallback(async (data: FormSchemaType) => {
-    console.log(isPost);
-
     if (isPost && setIsSheetOpen) {
       const formData = getFormData({
         jsonData: JSON.stringify(data),
@@ -72,7 +70,6 @@ function PostForm({ ...props }: FormType) {
       });
 
       const message = await post(formData);
-      console.log(message);
 
       await mutate();
       setIsSheetOpen(false);
