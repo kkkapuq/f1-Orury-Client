@@ -17,6 +17,7 @@ import ReviewRegisterModal from '@/app/_components/review/review-modal/ReviewReg
 import OneReview from '@/app/_components/review/review-modal/OneReview';
 import { Rating } from '@mui/material';
 import { ReviewRegisterType } from '@/types/review/review';
+import Image from 'next/image';
 /**
  * @description 지도 위에 띄위기 위해서 Modal로 구현을 합니다.
  * @param position 어느 방향에서 모달이 열릴지 결정합니다.
@@ -66,6 +67,56 @@ function WriteModal({ openPosition }: ReviewProps) {
   if (isLoadingMore || isEmpty) {
     return <ReviewModalSkeleton openPosition={openPosition} />;
   }
+  const [inputData, setInputData] = useState<{ value: string; count: number }>({
+    value: '',
+    count: 0,
+  });
+  const [textAreaData, setTextAreaData] = useState<{
+    value: string;
+    count: number;
+  }>({ value: '', count: 0 });
+
+  const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputData({
+      value,
+      count: value.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g, '$&$1$2').length,
+    });
+  };
+
+  const onTextAreaHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setTextAreaData({
+      value,
+      count: value.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g, '$&$1$2').length,
+    });
+  };
+  const [postImg, setPostImg] = useState<File[]>([]); // 서버 저장하는 파일 상태
+  const [previewImg, setPreviewImg] = useState<string[]>([]); // 미리보기 이미지를 생성하기 위한 상태 (원본이미지용량이 크기에 따로 분리)
+
+  const uploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileArr = e.target.files;
+    if (fileArr) {
+      const files = Array.from(fileArr);
+      setPostImg(files);
+
+      const newPreviewImg: string[] = [];
+
+      // 한 번만 생성하고 재사용
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        const result = fileReader.result as string;
+        setPreviewImg([...previewImg, result]);
+      };
+
+      // 파일마다 미리보기 이미지 생성
+      files.forEach(file => {
+        fileReader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {};
 
   return (
     <>
@@ -74,19 +125,94 @@ function WriteModal({ openPosition }: ReviewProps) {
         gym_name={reviews[0].data.data.gym_name}
       />
       <div className={modalClassName}>
-        {/* Top */}
         <div className="w-full bg-white max-w-[768px] z-[101] h-[3.5rem] fixed shadow flex items-center justify-center">
           <button type="button" className={positionClassName} onClick={reset}>
             {openPosition === 'center' ? <ChevronDown /> : <ChevronLeft />}
           </button>
-          {reviews[0].data.data.gym_name} 글쓰기
+          <div className="font-semibold text-lg">글쓰기</div>
         </div>
-        {/* Middle */}
-        <div className="relative mt-[3.5rem]">
-          {/* 리뷰남기기 */}
-          <div className="text-center">
-            <div className="text-center">
-              <div className="">이곳에 대해 총 평점은?</div>
+        <form
+          name="profile"
+          action="/action_page.php"
+          method="get"
+          className="p-5"
+        >
+          {/* Middle */}
+          <div className="relative mt-[3.5rem]">
+            {/* 운동장소 */}
+            <div className="mb-6">
+              <div className="font-bold text-base">
+                운동장소<span className="font-bold text-[#FF5247] "> *</span>
+              </div>
+              <div className="w-full rounded-md h-10 bg-[#F4F5F7] text-[#A5A7AE] flex items-center justify-center border border-gray-300">
+                {reviews[0].data.data.gym_name}
+              </div>
+            </div>
+            {/* 해당 암장 본인레벨 */}
+            <div className="mb-6">
+              <div className="font-bold text-base">
+                <div>
+                  해당 암장 본인레벨
+                  <span className="font-bold text-[#FF5247] "> *</span>
+                </div>
+                <div className="w-full rounded-md h-10 bg-[#F4F5F7] text-[#A5A7AE] flex items-center justify-center border border-gray-300">
+                  Click
+                </div>
+              </div>
+            </div>
+
+            {/* 한줄 기록 */}
+            <div className="mb-6">
+              <div>
+                <div className="flex justify-between">
+                  <div className="font-bold text-base">
+                    한줄 기록
+                    <span className="font-bold text-[#FF5247] "> *</span>
+                  </div>
+                  <p className="font-normal text-sm text-gray-600">
+                    <span>{inputData.count}</span>
+                    <span>/30</span>
+                  </p>
+                </div>
+                <input
+                  className="w-full border-b"
+                  required
+                  type="text"
+                  name="alias"
+                  onChange={onInputHandler}
+                  maxLength={30}
+                  placeholder="운동시설은 어땠나요?"
+                />
+              </div>
+            </div>
+
+            {/* 상세 내용 (선택) */}
+            <div className="mb-6">
+              <div>
+                <div className="flex justify-between">
+                  <div className="font-bold text-base">상세 내용 (선택)</div>
+                  <p className="font-normal text-sm text-gray-500">
+                    <span>{textAreaData.count}</span>
+                    <span>/500</span>
+                  </p>
+                </div>
+                <textarea
+                  className="w-full border-b"
+                  name="opinion"
+                  onChange={onTextAreaHandler}
+                  maxLength={500}
+                  placeholder="다른 유저에게 도움이 될 만한 정보를 입력해주세요."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom - 사진 및 제출 버튼 */}
+          <div className="text-center mb-6">
+            <div className="mb-6">
+              <div className="font-semibold text-lg">
+                이곳에 대해 총 평점은?
+              </div>
               <Rating
                 name="rating"
                 size="large"
@@ -107,9 +233,39 @@ function WriteModal({ openPosition }: ReviewProps) {
                 }}
               />
             </div>
-            <button type="button">작성완료</button>
+            <div className="border-3 flex">
+              <input
+                accept=".png, .jpg, .jpeg"
+                type="file"
+                onChange={uploadFile}
+                style={{
+                  width: '100px',
+                  height: '100px',
+                  color: '#F0F1F3',
+                  border: '1px solid #D1D1D1',
+                  borderRadius: '5px',
+                }}
+              />
+              {previewImg &&
+                previewImg.map((imgSrc, i) => (
+                  <div key={i} className="w-24 h-24">
+                    <Image
+                      alt={`Uploaded Image ${i}`}
+                      src={imgSrc}
+                      width={100}
+                      height={100}
+                    />
+                  </div>
+                ))}
+            </div>
+            <button
+              type="submit"
+              className="w-full rounded-md h-10 bg-gray-200 text-gray-600 mt-4"
+            >
+              작성완료
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

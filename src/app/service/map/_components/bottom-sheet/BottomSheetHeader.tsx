@@ -9,6 +9,7 @@ import { Phone, Star, StarHalf, ChevronRight } from 'lucide-react';
 import SquarePen from 'public/square-pen.svg';
 import { BottomSheetInnerProps } from '@/types/map/BottomSheetProps';
 import useReviewStore from '@/store/review/reviewStore';
+import { Rating } from '@mui/material';
 
 function BottomSheetHeader({ data }: BottomSheetInnerProps) {
   const {
@@ -72,20 +73,10 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
       </section>
       {/* 5개 빈 별공간 */}
       <section className="flex text-sm leading-5 font-semibold text-black">
-        <div className="relative">
-          <div className="flex gap-4px">
-            {Array.from({ length: 5 }, (_, index) => (
-              <Star key={index} fill="#C3C6CC" strokeWidth={0} />
-            ))}
-          </div>
-          {/* 별 점수에 따라 넣어야함 (로직 아직안함), 별점 점수도 바꿔야함 */}
-          <div className="flex gap-4px absolute top-0">
-            <Star fill="#FFCB29" strokeWidth={0} />
-            <Star fill="#FFCB29" strokeWidth={0} />
-            <StarHalf fill="#FFCB29" strokeWidth={0} />
-          </div>
-        </div>
-        별점 점수
+        <Rating value={score_average} readOnly />
+        <span className="ml-1 font-semibold content-center">
+          {score_average}
+        </span>
         <ChevronRight size={24} strokeWidth={1} />
       </section>
 

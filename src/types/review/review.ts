@@ -1,12 +1,12 @@
 export interface ReactionType {
-  type: 'interest' | 'like' | 'help' | 'thumb' | 'angry';
+  type: 'wantToGo' | 'helped' | 'great' | 'funny';
   count: number;
 }
 
 export interface ReviewDataType {
   id: number;
   is_mine: boolean;
-  my_reaction: 'interest' | 'like' | 'help' | 'thumb' | 'angry' | null;
+  my_reaction: 'wantToGo' | 'helped' | 'great' | 'funny' | null;
   review_reaction_count: ReactionType[];
   content: string;
   images: string[];
@@ -16,7 +16,7 @@ export interface ReviewDataType {
   writer: {
     id: number;
     nickname: string;
-    profileImage: string;
+    profile_image: string;
   };
 }
 
