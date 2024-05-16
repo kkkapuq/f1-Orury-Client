@@ -16,6 +16,7 @@ import type { KakaoBackGroundMapProps } from '@/types/map/BottomSheetProps';
 import type { AreaGridType, OneSearchKeywordType } from '@/types/map/map';
 import { useSearchParams } from 'next/navigation';
 import useMap from '@/apis/map/hooks/useMap';
+import { useAroundGymListStore } from '@/store/map/gymStore';
 
 /**
  * @description 맵으로서 해당 도메인에서는 뒷배경에 위치하고 있습니다.
@@ -43,10 +44,8 @@ function KakaoBackGroundMap({
     level: 3,
     position: mapInfo.center,
   });
-  // 지도 움직임에 따라 인근 암장 리스트 useState
-  const [mapAroundGymList, setMapAroundGymList] = useState<
-    OneSearchKeywordType[] | undefined
-  >(undefined);
+  // 지도 움직임에 따라 인근 암장 리스트 zustand
+  const { mapAroundGymList, setMapAroundGymList } = useAroundGymListStore();
 
   const onMovePosition = (item: OneSearchKeywordType) => {
     handleMovePosition(item);

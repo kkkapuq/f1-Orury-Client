@@ -3,9 +3,13 @@ interface HeaderProps {
   isBack?: boolean;
   isExit?: boolean;
   isEllipsis?: boolean;
+  isSearching: boolean;
   okHandler?: () => void;
-  exitHandler?: () => void;
-  editHandler?: () => void;
+  onExit?: () => void;
+  onEdit?: () => void;
+  onSearch?: () => void;
+  onBack?: () => void;
+  routeTo?: string;
 }
 
 export default HeaderProps;

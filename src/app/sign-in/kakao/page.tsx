@@ -18,7 +18,7 @@ import { SIGN_UP_ERROR_MESSAGES } from '@/constants/sign-in';
 
 // 카카오 소셜 로그인 REDIRECT URI PAGE
 function Page() {
-  const { home, service, signUp } = CALLBACK_URL;
+  const { home, service, signUp, map } = CALLBACK_URL;
   const { invalidEmail, noAccount, haveAnotherAccount } = ERROR_CODE;
   const { toast } = useToast();
   const { signUpType, setId, setEmail } = useUserStore();
@@ -41,12 +41,22 @@ function Page() {
 
       switch (response?.status) {
         case STATUS_CODE.ok:
-          router.push(service);
+          router.push(service + map);
           setId(response.data.id);
+          toast({
+            variant: 'default',
+            description: response?.message || SIGN_UP_ERROR_MESSAGES.default,
+            duration: 2000,
+          });
           break;
 
         case invalidEmail:
           router.push(home);
+          toast({
+            variant: 'default',
+            description: response?.message || SIGN_UP_ERROR_MESSAGES.default,
+            duration: 2000,
+          });
           break;
 
         case noAccount:
@@ -68,18 +78,17 @@ function Page() {
 
         case haveAnotherAccount:
           router.push(home);
+          toast({
+            variant: 'default',
+            description: response?.message || SIGN_UP_ERROR_MESSAGES.default,
+            duration: 2000,
+          });
           break;
 
         default:
           router.push(home);
           break;
       }
-
-      toast({
-        variant: 'default',
-        description: response?.message || SIGN_UP_ERROR_MESSAGES.default,
-        duration: 2000,
-      });
     };
 
     signIn();

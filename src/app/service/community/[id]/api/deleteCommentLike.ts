@@ -4,9 +4,11 @@ import { END_POINT } from '@/constants/api/end-point';
 
 const deleteCommentLike = async ({ comment_id }: { comment_id: number }) => {
   try {
-    await axiosInstance.delete(
+    const response = await axiosInstance.delete(
       END_POINT.commentController.likeComment(comment_id),
     );
+
+    return response.status;
   } catch (error: unknown) {
     if (error instanceof CustomError) {
       throw new Error(error.message);

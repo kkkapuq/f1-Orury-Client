@@ -1,14 +1,14 @@
 export interface UserProps {
-  user_profile_image: string;
-  user_nickname: string;
-  created_at: string;
-  user_id?: number;
-  post_id?: number;
-  comment_id?: number;
-  parent_id?: number;
-  is_like?: boolean;
-  like_count?: number;
-  comment_count?: number;
+  userProfileImage: string;
+  userNickname: string;
+  createdAt: string;
+  userId?: number;
+  postId?: number;
+  commentId?: number;
+  parentId?: number;
+  isLike?: boolean;
+  likeCount?: number;
+  commentCount?: number;
   hasButton?: boolean;
-  is_mine?: boolean;
+  isMine?: boolean;
 }

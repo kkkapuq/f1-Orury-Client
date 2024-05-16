@@ -64,7 +64,7 @@ function Page() {
 
   return (
     <div className="h-full relative">
-      <ReviewModalContainer isMyPage={false} openPosition="right" />
+      <ReviewModalContainer isMyPage={false} isWrite openPosition="right" />
       <ImageModal />
       <ImageSliderModal />
       <KakaoBackGroundMap

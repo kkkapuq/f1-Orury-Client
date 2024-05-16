@@ -21,8 +21,8 @@ function Withdrawal() {
           title={MODAL.withdrawal.title}
           content="아직 준비중입니다."
           okContent={MODAL.withdrawal.okContent}
-          cancelHandler={clickHandler}
-          okHandler={() => {}}
+          onCancelClick={clickHandler}
+          onOkClick={() => {}}
         />
       )}
     </div>

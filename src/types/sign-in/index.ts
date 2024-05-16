@@ -1,13 +1,16 @@
+import { StaticImageData } from 'next/image';
+
 export interface UserStateProps {
   signUpType: number;
   id: number;
   email: string | null;
-  profile_image: string;
+  profile_image: File | StaticImageData;
   category: string | null;
   setSignUpType: (value: number) => void;
   setId: (value: number) => void;
   setEmail: (value: string | null) => void;
   setCategory: (value: string | null) => void;
+  setProfileImage: (value: File | StaticImageData) => void;
 }
 
 export interface GetUserInfoProps {

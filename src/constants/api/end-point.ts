@@ -176,7 +176,36 @@ export const END_POINT = {
     detail: (detailId: string) =>
       `${END_POINT.gymController.default}/${detailId}`,
   },
+  crewController: {
+    main: '/crews',
 
+    // GET : 크루 상세 조회
+    getCrewDetail: (crewId: number) => `/crews/${crewId}`,
+
+    // GET: 크루 추천순 조회
+    getListByRecommend: (page: number) => `/crews/recommend?page=${page}`,
+
+    // GET: 크루 랭킹순 조회
+    getListByRank: (page: number) => `/crews/popular?page=${page}`,
+
+    // GET: 내 크루 목록 조회
+    getMyCrews: () => `/crews/mycrew`,
+
+    // GET: 내 크루 가입 신청 목록 조회
+    getMyApplications: () => `/crews/myApplications`,
+
+    // DELETE: 내 크루 가입 신청 철회
+    deleteMyApplication: (crewId: number) => `/crews/${crewId}/withdrawals`,
+
+     // DELETE: 내 크루 가입 신청 철회
+     deleteMyCrew: (crewId: number) => `/crews/${crewId}`,
+
+    // GET: 크루 멤버 조회
+    getCrewMembers: (crewId: number) => `/crews/${crewId}/members`,
+
+    // GET: 크루 지원자 조회
+    getCrewApplicants: (crewId: number) => `/crews/${crewId}/applicants`,
+  },
   notificationController: {
     // DEFAULT
     default: '/notification',

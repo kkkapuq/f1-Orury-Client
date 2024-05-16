@@ -5,13 +5,16 @@ import { PostSignUpProps } from '@/types/sign-up';
 import { TResponse } from '@/types/common/response';
 import { UserInfoProps } from '@/types/sign-in';
 
-const postSignUp = async ({ ...data }: PostSignUpProps) => {
+const postSignUp = async (formData: FormData) => {
   try {
     const { data: response } = await axiosInstance.post<
       TResponse<UserInfoProps>
-    >(END_POINT.auth.signUp, {
-      ...data,
+    >(END_POINT.auth.signUp, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
+
     return response;
   } catch (error: unknown) {
     if (error instanceof CustomError) {

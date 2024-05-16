@@ -1,20 +1,20 @@
 'use client';
 
-import Lottie from 'react-lottie';
-import lottieOption from '@/utils/lottieOption';
-import getReady from '$/lotties/get_ready.json';
-
-import { giants } from '@/styles/fonts';
+import { useCrewListState } from '@/store/crew/crewListStore';
+import { TABS_CREW } from '@/constants/crew/tabs';
+import Tabs from '@/app/_components/common/Tabs';
+import Header from '@/app/_components/common/Header';
+import HEADER from '@/constants/ui/common/header';
+import CrewList from './_components/CrewList';
+import ChatListFAB from './_components/ChatListFAB';
 
 function Page() {
   return (
-    <div className="flex flex-col h-full-size-omit-nav justify-center items-center">
-      <Lottie options={lottieOption(getReady)} width={200} height={200} />
-      <span
-        className={`text-lg sm:text-xl text-grey-600 pt-4 ${giants.className}`}
-      >
-        곧 크루 서비스가 공개될 예정입니다!
-      </span>
+    <div className="relative bg-[#F9F9F9] min-h-dvh pb-16">
+      <Header title={HEADER.crew} routeTo="/service/crew/create" />
+      <Tabs tabs={TABS_CREW} useStateHook={useCrewListState} />
+      <CrewList />
+      <ChatListFAB />
     </div>
   );
 }

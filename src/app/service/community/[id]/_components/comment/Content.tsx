@@ -7,9 +7,9 @@ import useCommentListApi from '@/hooks/community/useCommentList';
 import { Check, X } from 'lucide-react';
 import { useToast } from '@/app/_components/ui/use-toast';
 import { ChangeEvent, useMemo, useState } from 'react';
-import type { ModifyContentProps } from '@/types/community/comment';
+import type { ContentProps } from '@/types/community/comment';
 
-function ModifyContent({ ...props }: ModifyContentProps) {
+function Content({ ...props }: ContentProps) {
   const { comment_id, post_id, content } = props;
   const { toast } = useToast();
   const { setCommentId, commentId, isEditMode, setIsEditMode } =
@@ -92,7 +92,7 @@ function ModifyContent({ ...props }: ModifyContentProps) {
       )}
 
       {!isToggled && (
-        <span className="flex items-center whitespace-pre-wrap">
+        <span className="flex items-center whitespace-pre-wrap text-sm">
           {contentValue}
         </span>
       )}
@@ -100,4 +100,4 @@ function ModifyContent({ ...props }: ModifyContentProps) {
   );
 }
 
-export default ModifyContent;
+export default Content;

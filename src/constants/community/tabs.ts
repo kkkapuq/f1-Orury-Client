@@ -1,8 +1,4 @@
-const TABS = {
-  hot: {
-    title: '인기',
-    id: 3,
-  },
+const TABS_COMMUNITY = {
   main: {
     title: '자유게시판',
     id: 1,
@@ -11,6 +7,10 @@ const TABS = {
     title: 'QnA',
     id: 2,
   },
+  notice: {
+    title: '공지사항',
+    id: 3,
+  },
 } as const;
 
-export default TABS;
+export default TABS_COMMUNITY;

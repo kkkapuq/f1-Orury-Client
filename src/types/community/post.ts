@@ -3,7 +3,7 @@ export interface OnePostProps {
   title: string;
   content: string;
   view_count: number;
-  thumbnail_image: string;
+  thumbnail_image: string | null;
   category: number;
   user_id: number;
   user_nickname: string;
@@ -22,7 +22,7 @@ export interface PostDetailProps {
   view_count: number;
   comment_count: number;
   like_count: number;
-  images: string[];
+  images: string[] | null;
   category: number;
   created_at: string;
   updated_at: string;
@@ -77,3 +77,8 @@ export type MyPostListData = {
   cursor: number;
   next_page?: number;
 };
+
+export interface PostCategoryType {
+  category: number;
+  isHot?: boolean;
+}

@@ -1,8 +1,11 @@
+import TABS_COMMUNITY from '@/constants/community/tabs';
+
 import { END_POINT } from '@/constants/api/end-point';
-import TABS from '@/constants/community/tabs';
+import { UseSortByStateProps } from '@/store/crew/sortsStore';
 import { TResponse } from '@/types/common/response';
 import { CommentListData } from '@/types/community/comment';
 import { PostListData } from '@/types/community/post';
+import { CrewListData } from '@/types/crew/crewList';
 import { NotificationData } from '@/types/notification';
 import { AxiosResponse } from 'axios';
 
@@ -76,13 +79,13 @@ export const getPostListKey = (
 
   if (
     previousPageData &&
-    categoryId === TABS.hot.id &&
+    categoryId === TABS_COMMUNITY.notice.id &&
     previousPageData.data.data.next_page === -1
   ) {
     return null;
   }
 
-  if (!previousPageData && categoryId === TABS.hot.id) {
+  if (!previousPageData && categoryId === TABS_COMMUNITY.notice.id) {
     return END_POINT.postController.getHotPostList(0);
   }
 
@@ -95,11 +98,62 @@ export const getPostListKey = (
       previousPageData?.data.data.next_page,
     );
   }
-
   return END_POINT.postController.getPostList(
     categoryId,
     previousPageData?.data.data.cursor as number,
   );
+};
+
+export const getCrewListKey = (
+  selectedOption: UseSortByStateProps['selectedOption'],
+  pageIndex?: number,
+  previousPageData?: AxiosResponse<TResponse<CrewListData>>,
+) => {
+  let endpoint: (pageNumber: number) => string =
+    END_POINT.crewController.getListByRecommend;
+  switch (selectedOption.title) {
+    case '추천순':
+      endpoint = END_POINT.crewController.getListByRecommend;
+      break;
+    case '인기순':
+      endpoint = END_POINT.crewController.getListByRank;
+      break;
+    default:
+      endpoint = END_POINT.crewController.getListByRecommend;
+      break;
+  }
+
+  const currentPage = previousPageData?.data.data.number;
+
+  // 첫 페이지가 아닌 마지막 페이지인 경우 null을 반환한다.
+  if (
+    previousPageData &&
+    !previousPageData.data.data.first &&
+    previousPageData.data.data.last
+  ) {
+    return null;
+  }
+
+  // 첫 페이지인 경우
+  if (!previousPageData && pageIndex === 0) {
+    return endpoint(0);
+  }
+
+  return endpoint((currentPage as number) + 1);
+};
+
+export const getMyCrewListKey = (
+  selectedOption: UseSortByStateProps['selectedOption'],
+) => {
+  if (selectedOption) {
+    switch (selectedOption.title) {
+      case '참여 중':
+        return END_POINT.crewController.getMyCrews();
+        break;
+      case '참여 대기중':
+        return END_POINT.crewController.getMyApplications();
+    }
+  }
 };
 
 export const getNotificationListKey = (

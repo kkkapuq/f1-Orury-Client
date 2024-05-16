@@ -6,6 +6,7 @@ interface ButtonProps {
   submit?: boolean;
   outline?: boolean;
   disabled?: boolean;
+  weight?: string;
   onClick?: () => void;
 }
 
@@ -16,10 +17,12 @@ function Button({
   submit,
   outline,
   disabled,
+  weight,
 }: ButtonProps) {
-  const buttonClassName = clsx('w-full rounded-xl h-12', {
+  const buttonClassName = clsx(`w-full rounded-xl h-12 font-${weight}`, {
     [`border-2 border-${color} text-${color}`]: outline,
-    [`bg-${color} border-none text-white`]: !outline,
+    [`bg-${color} border-none text-white`]: !outline && !disabled,
+    [`border-none text-white`]: !outline && disabled,
     'disabled:pointer-events-none bg-disabled': disabled,
   });
 

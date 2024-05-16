@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import Image from 'next/image';
 import OneSiteUrl from '@/app/service/map/_components/bottom-sheet/OneSiteUrl';
 import BarRatingChart from '@/app/service/map/_components/chart/BarRatingChart';
@@ -11,7 +12,10 @@ import useReviewStore from '@/store/review/reviewStore';
 import { cn } from '@/lib/utils';
 import { Tab, Tabs, Box, Typography } from '@mui/material';
 import { useState } from 'react';
+import useReviewApi from '@/apis/review/hooks/useReview';
+import noResult from '$/images/noResult.png';
 import BottomSheetInfoTab from './BottomSheetInfoTab';
+import BottomSheetReviewTab from './BottomSheetReviewTab';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,6 +43,25 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
+const useStyles = () => ({
+  indicator: {
+    color: 'black',
+    backgroundColor: '#F7F5F2',
+    margin: '0px auto',
+    width: 'fit-content',
+    borderRadius: '65px',
+  },
+  inactiveTab: {
+    //  width: '110px',
+    borderRadius: '65px',
+  },
+  // Todo : activeTab스타일 적용이 안되고있음, 추가 확인해봐야함
+  activeTab: {
+    fontWeight: '600',
+    color: 'white',
+    backgroundColor: '#855AFF',
+  },
+});
 /**
  * @description 바텀시트의 내부 콘테이너로서 내용물을 보여주는데 초점을 두고 있습니다.
  * @param data 상세정보들을 가져와서 보여주기 위해 상세값들을 가져옵니다.
@@ -62,16 +85,17 @@ function BottomSheetInner({ data }: BottomSheetInnerProps) {
     phone_number,
     position,
   } = data;
-
+  const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
-  const onModalOpen = () => {
-    onReview(id);
-  };
+  const { data: reviewAPIData, isLoading } = useReviewApi.useGetReviews(id);
+
+  let reviewData;
+  if (reviewAPIData) reviewData = reviewAPIData.flat()[0];
 
   return (
     <>
@@ -91,23 +115,52 @@ function BottomSheetInner({ data }: BottomSheetInnerProps) {
       </div>
        */}
       {/* Tab */}
-      <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs
-            value={tabValue}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="정보" />
-            <Tab label="리뷰" />
-          </Tabs>
-        </Box>
+      <Box sx={{ width: '100%', marginTop: '20px' }}>
+        <Tabs
+          value={tabValue}
+          onChange={handleChange}
+          sx={{
+            ...classes.indicator,
+          }}
+        >
+          <Tab
+            sx={{
+              ...classes.inactiveTab,
+              ...(tabValue === 0 && classes.activeTab),
+            }}
+            label="정보"
+          />
+          <Tab
+            sx={{
+              ...classes.inactiveTab,
+              ...(tabValue === 1 && classes.activeTab),
+            }}
+            label="리뷰"
+          />
+        </Tabs>
+
         {/* CustomTabPanel안에 기본적으로 padding이 사방들어감 */}
         <CustomTabPanel value={tabValue} index={0}>
           <BottomSheetInfoTab data={data} />
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={1}>
-          리뷰컴포넌트 넣기
+          {reviewData && reviewData?.data.data.reviews.length > 0 ? (
+            <BottomSheetReviewTab data={reviewData?.data.data} />
+          ) : (
+            <div className="flex h-full justify-center items-center mt-[20%]">
+              <div className="flex flex-col items-center justify-center ">
+                <Image
+                  src={noResult}
+                  alt="no-result"
+                  width={100}
+                  height={100}
+                />
+                <p className="mt-4 text-center text-[#C3C6CC]">
+                  리뷰가 없습니다.
+                </p>
+              </div>
+            </div>
+          )}
         </CustomTabPanel>
       </Box>
     </>

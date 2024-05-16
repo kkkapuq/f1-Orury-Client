@@ -1,22 +1,39 @@
 'use client';
 
 import clsx from 'clsx';
-import Modal from '@/app/_components/common/Modal';
 import HeaderProps from '@/types/ui/common/header';
 import deletePost from '@/app/service/community/[id]/api/deletePost';
 import usePostListApi from '@/hooks/community/usePostList';
-import * as M from '@/app/_components/ui/menubars';
+import Ellipsis from '@/app/_components/common/Ellipsis';
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ChevronLeft, MoreVertical, X } from 'lucide-react';
+import {
+  ChevronLeft,
+  MoreVertical,
+  X,
+  Search,
+  Upload,
+  Plus,
+} from 'lucide-react';
 import { usePostsState } from '@/store/community/postsStore';
-import { MODAL } from '@/constants/ui/common/modal';
 import { useDebouncedCallback } from 'use-debounce';
 import { useToast } from '@/app/_components/ui/use-toast';
+import { COLOR } from '@/styles/color';
 
 function Header({ ...props }: Partial<HeaderProps>) {
-  const { title, isBack, isExit, isEllipsis, editHandler, exitHandler } = props;
+  const {
+    title,
+    isBack,
+    isExit,
+    isEllipsis,
+    isSearching,
+    onEdit,
+    onExit,
+    onSearch,
+    onBack,
+    routeTo,
+  } = props;
   const { toast } = useToast();
   const { categoryId } = usePostsState();
   const { mutate } = usePostListApi.useGetPostList(categoryId);
@@ -55,54 +72,46 @@ function Header({ ...props }: Partial<HeaderProps>) {
   };
 
   return (
-    <header className="sticky top-0 flex items-center justify-center h-12 bg-white z-10">
+    <header className="sticky top-0 flex items-center justify-center h-12 bg-white z-10 relative">
       <button
         type="button"
-        onClick={onBackHandler}
+        onClick={onBack || onBackHandler}
         className={buttonClassName(isBack)}
       >
         {isBack && <ChevronLeft />}
       </button>
       <span className="font-medium">{title}</span>
-      <div className={ellipsisClassName(isEllipsis)}>
-        {isEllipsis && (
-          <M.Menubar className="border-none">
-            <M.MenubarMenu>
-              <M.MenubarTrigger>
-                <MoreVertical />
-              </M.MenubarTrigger>
-              <M.MenubarContent>
-                <M.MenubarCheckboxItem
-                  onClick={editHandler}
-                  className="bg-white"
-                >
-                  수정
-                </M.MenubarCheckboxItem>
-                <M.MenubarCheckboxItem
-                  className="text-warning bg-white"
-                  onClick={cancelHandler}
-                >
-                  삭제
-                </M.MenubarCheckboxItem>
-              </M.MenubarContent>
-            </M.MenubarMenu>
-            {openDeleteModal && (
-              <Modal
-                title={MODAL.deletePost.title}
-                content={MODAL.deletePost.content}
-                okContent={MODAL.deletePost.okContent}
-                cancelHandler={cancelHandler}
-                okHandler={okHandler}
-              />
-            )}
-          </M.Menubar>
+      <div className="absolute right-4">
+        {isEllipsis && <Ellipsis isPost onEditPost={onEdit} isMine />}
+        {categoryId !== 3 && isSearching && (
+          <button type="button" onClick={onSearch}>
+            <Search color={COLOR.primary} />
+          </button>
         )}
-        {isExit && (
-          <button type="button" onClick={exitHandler}>
-            <X />
+        {categoryId === 3 && (
+          <button type="button" onClick={onSearch}>
+            <Upload strokeWidth={1} />
           </button>
         )}
       </div>
+      {isExit && (
+        <button
+          type="button"
+          className={buttonClassName(isBack)}
+          onClick={onBackHandler}
+        >
+          <X />
+        </button>
+      )}
+      {routeTo && (
+        <button
+          type="button"
+          className={buttonClassName(isBack)}
+          onClick={() => router.push(routeTo)}
+        >
+          <Plus color={COLOR.primary} />
+        </button>
+      )}
     </header>
   );
 }

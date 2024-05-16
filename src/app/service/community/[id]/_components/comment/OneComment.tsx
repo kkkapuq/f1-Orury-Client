@@ -2,6 +2,7 @@
 
 'use client';
 
+import { useState } from 'react';
 import { CornerDownRight } from 'lucide-react';
 import { OneCommentType } from '@/types/community/comment';
 import { COLOR } from '@/styles/color';
@@ -9,8 +10,10 @@ import { COLOR } from '@/styles/color';
 import clsx from 'clsx';
 import User from '@/app/service/community/_components/User';
 import Deleted from '@/app/service/community/[id]/_components/comment/Deleted';
-import ModifyContent from '@/app/service/community/[id]/_components/comment/ModifyContent';
+import Content from '@/app/service/community/[id]/_components/comment/Content';
 import useCommentStore from '@/store/community/commentStore';
+import CommentButtons from '@/app/service/community/[id]/_components/comment/CommentButtons';
+import Ellipsis from '@/app/_components/common/Ellipsis';
 
 function OneComment({ ...props }: OneCommentType) {
   const { grey400, purple700 } = COLOR;
@@ -29,10 +32,10 @@ function OneComment({ ...props }: OneCommentType) {
     is_mine,
     user_id,
   } = props;
+  const [likes, setLikes] = useState(like_count);
 
   const liClassName = clsx('flex border-b', {
     'bg-purple-50': isFocus && commentId === id,
-    'bg-white': !isFocus || commentId !== id,
   });
 
   const iconClassName = clsx('h-[96px] pl-2', {
@@ -57,23 +60,29 @@ function OneComment({ ...props }: OneCommentType) {
           <Deleted />
         ) : (
           <div className="flex flex-col gap-2 p-[13.5px]">
-            <User
-              user_nickname={user_nickname}
-              user_profile_image={user_profile_image}
-              created_at={created_at}
-              like_count={like_count}
-              is_like={is_like}
-              comment_id={id}
-              parent_id={parent_id}
-              post_id={post_id}
-              is_mine={is_mine}
-              user_id={user_id}
-              hasButton
-            />
-            <ModifyContent
-              comment_id={id}
-              post_id={post_id}
-              content={content}
+            <div className="flex justify-between">
+              <User
+                userNickname={user_nickname}
+                userProfileImage={user_profile_image}
+                createdAt={created_at}
+                likeCount={like_count}
+                isLike={is_like}
+                commentId={id}
+                parentId={parent_id}
+                postId={post_id}
+                isMine={is_mine}
+                userId={user_id}
+              />
+              <Ellipsis commentId={id} isMine={is_mine} />
+            </div>
+            <Content comment_id={id} post_id={post_id} content={content} />
+            <CommentButtons
+              commentId={id}
+              postId={post_id}
+              parentId={parent_id}
+              isLike={is_like}
+              likes={likes}
+              setLikes={setLikes}
             />
           </div>
         )}

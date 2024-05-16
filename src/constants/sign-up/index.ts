@@ -30,7 +30,7 @@ export const rBirthform = /(\d{4})(\d{2})(\d{2})/;
 export const INVALID_MESSAGE = {
   birth: '⚠ 생년월일 형식이 올바르지 않습니다.',
   gender: '⚠ 성별을 선택해주세요.',
-  nickname: '⚠ 닉네임은 2글자 이상, 8글자 이하여야 합니다.',
+  nickname: '⚠ 닉네임은 2글자 이상, 8글자 이하여야합니다.',
 } as const;
 
 export const TERM_OF_SERVICE = {

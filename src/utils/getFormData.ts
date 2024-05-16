@@ -17,7 +17,7 @@ export const getFormData = ({ images, jsonData }: GetFormDataProps) => {
     );
   }
 
-  images.forEach(image => formData.append('image', image));
+  if (images) images.forEach(image => formData.append('image', image));
 
   return formData;
 };

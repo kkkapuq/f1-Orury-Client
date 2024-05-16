@@ -8,6 +8,8 @@ import OneSiteUrl from './OneSiteUrl';
 import { Phone, Star, StarHalf, ChevronRight } from 'lucide-react';
 import SquarePen from 'public/square-pen.svg';
 import { BottomSheetInnerProps } from '@/types/map/BottomSheetProps';
+import useReviewStore from '@/store/review/reviewStore';
+import { Rating } from '@mui/material';
 
 function BottomSheetHeader({ data }: BottomSheetInnerProps) {
   const {
@@ -38,6 +40,16 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
   const addressSplit = address.split(' ');
   const handlePhoneClick = () => {};
   const handleWriteClick = () => {};
+
+  const onReview = useReviewStore(state => state.onReview);
+  const { isOpen, reset, setCreateMode, reviewId } = useReviewStore(
+    state => state,
+  );
+
+  const onModalOpen = () => {
+    onReview(id);
+  };
+
   return (
     <>
       {/* 인스타 및 북마크 */}
@@ -61,20 +73,10 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
       </section>
       {/* 5개 빈 별공간 */}
       <section className="flex text-sm leading-5 font-semibold text-black">
-        <div className="relative">
-          <div className="flex gap-4px">
-            {Array.from({ length: 5 }, (_, index) => (
-              <Star key={index} fill="#C3C6CC" strokeWidth={0} />
-            ))}
-          </div>
-          {/* 별 점수에 따라 넣어야함 (로직 아직안함), 별점 점수도 바꿔야함 */}
-          <div className="flex gap-4px absolute top-0">
-            <Star fill="#FFCB29" strokeWidth={0} />
-            <Star fill="#FFCB29" strokeWidth={0} />
-            <StarHalf fill="#FFCB29" strokeWidth={0} />
-          </div>
-        </div>
-        별점 점수
+        <Rating value={score_average} readOnly />
+        <span className="ml-1 font-semibold content-center">
+          {score_average}
+        </span>
         <ChevronRight size={24} strokeWidth={1} />
       </section>
 
@@ -90,6 +92,7 @@ function BottomSheetHeader({ data }: BottomSheetInnerProps) {
         <button
           type="button"
           className="flex items-center justify-center w-[155px] h-[36px] px-6px gap-2 rounded-lg border border-solid border-[#E5E7EB]"
+          onClick={onModalOpen}
         >
           <Image src={SquarePen} width="24" height="24" alt="글쓰기" />
           <span className="ml-2">글쓰기</span>
