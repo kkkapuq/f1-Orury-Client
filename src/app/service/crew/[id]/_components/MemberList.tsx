@@ -27,8 +27,6 @@ function MemberList({ setIsMemberListClicked, crewId }: MemberListProps) {
     fetchCrewMembers();
   }, [crewId]);
 
-  console.log(crewMembers);
-
   const sortedCrewMembers = [...crewMembers].sort((a, b) => {
     if (a.is_crew_creator && !b.is_crew_creator) {
       return -1;
@@ -54,8 +52,8 @@ function MemberList({ setIsMemberListClicked, crewId }: MemberListProps) {
       </header>
       <ul className="p-[16px] flex flex-col gap-[20px]">
         {sortedCrewMembers &&
-          sortedCrewMembers.map((member) => (
-            <li key={member.id}>
+          sortedCrewMembers.map(member => (
+            <li key={member.id} className="list-none">
               <div className="flex w-full h-fit gap-[10px]">
                 <div className="size-[40px] relative shrink-0">
                   <Image

@@ -2,7 +2,6 @@
 
 import { CrewDetailProps } from '@/types/crew/crew';
 import clsx from 'clsx';
-import { MoreVertical } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -19,9 +18,12 @@ import Label from '../create/_components/UI/Label';
 import MemberList from './_components/MemberList';
 import Schedules from './_components/Schedules';
 import getCrewDetail from './api/getCrewDetail';
-import CreateCrewForm from '../create/_components/CreateCrewForm';
+import { OptionDrawer } from '../_components/OptionDrawer';
+import Modal from '@/app/_components/common/Modal';
+import { MODAL } from '@/constants/ui/common/modal';
+import crewApi from './api/crew';
 
-function Page({ params }: { params: { id: string } }) {
+function Page({ params }: { params: { id: number } }) {
   const { isSheetOpen, setIsSheetOpen }: BottomSheetStore =
     useBottomSheetStore();
 
@@ -31,19 +33,25 @@ function Page({ params }: { params: { id: string } }) {
   const crewId = Number(id);
   const [crewDetail, setCrewDetail] = useState<CrewDetailProps>();
   const [isMemberListClicked, setIsMemberListClicked] = useState(false);
-  const [IsOpenEdit, setIsOpenEdit] = useState(false);
+  const [isModalOpen, setisModalOpen] = useState(false);
+
   const {
     name,
     tags,
     head_profile_image,
     user_images,
     icon,
-    region,
+    regions,
     capacity,
     member_count,
     description,
     is_member,
     head_name,
+    is_crew_creator,
+    gender,
+    min_age,
+    max_age,
+    permission_required,
   } = crewDetail || {};
 
   useEffect(() => {
@@ -56,6 +64,26 @@ function Page({ params }: { params: { id: string } }) {
 
   const onDisMiss = () => {
     setIsSheetOpen(false);
+  };
+
+  const handleEditCrew = () => {
+    router.push(`${crewId}/edit`);
+  };
+
+  // 크루 삭제하기
+  const deleteCrew = async () => {
+    await crewApi.DeleteCrew(id);
+    setisModalOpen(isClicked => !isClicked);
+  };
+
+  // 크루 신고하기
+  const reportCrew = async () => {
+    console.log('크루신고 실행');
+    setisModalOpen(isClicked => !isClicked);
+  };
+
+  const handleCrewMember = () => {
+    router.push(`${crewId}/members`);
   };
 
   if (!crewDetail) {
@@ -71,13 +99,9 @@ function Page({ params }: { params: { id: string } }) {
     );
   }
 
-  // if (IsOpenEdit) {
-  //   return <CreateCrewForm crewDetail={crewDetail} />;
-  // }
-
   return (
     <div className="relative min-h-full-size-omit-nav bg-[#f5f5f5]">
-      <header className="sticky top-0 flex items-center justify-center h-12 bg-white z-10 relative">
+      <header className="sticky top-0 flex items-center justify-center h-12 bg-white z-10">
         <button
           type="button"
           onClick={() => {
@@ -88,13 +112,29 @@ function Page({ params }: { params: { id: string } }) {
           <ChevronLeft />
         </button>
         {HEADER.crew}
-        <button
-          type="button"
-          onClick={() => setIsOpenEdit(true)}
-          className={'absolute right-4'}
-        >
-          <MoreVertical />
-        </button>
+        <OptionDrawer
+          handlers={
+            is_crew_creator
+              ? {
+                  '크루 수정하기': { onClick: handleEditCrew },
+                  '크루원 관리': { onClick: handleCrewMember },
+                  '크루 삭제하기': {
+                    onClick: () => {
+                      setisModalOpen(isClicked => !isClicked);
+                    },
+                    color: '#E53A35',
+                  },
+                }
+              : {
+                  신고하기: {
+                    onClick: () => {
+                      setisModalOpen(isClicked => !isClicked);
+                    },
+                    color: '#E53A35',
+                  },
+                }
+          }
+        />
       </header>
 
       <div className="flex flex-col h-full">
@@ -126,8 +166,8 @@ function Page({ params }: { params: { id: string } }) {
           <div className="text-[18px] font-semibold mb-[14px]">{name}</div>
           <div className="flex gap-[4px]">
             <MapPin className="w-4 h-4" />
-            {region &&
-              region.map(region => (
+            {regions &&
+              regions.map(region => (
                 <span key={region} className="text-xs font-medium text-[14px]">
                   {region}
                 </span>
@@ -199,11 +239,20 @@ function Page({ params }: { params: { id: string } }) {
               <Label className="mb-[16px]">가입 정보</Label>
               <div className="grid grid-cols-[26px_1fr] gap-[12px]">
                 <span className="text-[#919191]">성별</span>
-                <span>{`{gender}`}</span>
+                <span>
+                  {' '}
+                  {gender === 'ANY'
+                    ? '누구나'
+                    : gender === 'FEMALE'
+                      ? '여자만'
+                      : '남자만'}
+                </span>
                 <span className="text-[#919191]">나이</span>
-                <span>{`{min_age}~{max_age}세`}</span>
+                <span>{`${min_age}~${max_age}세`}</span>
                 <span className="text-[#919191]">가입</span>
-                <span>{`{permission_required}`}</span>
+                <span>
+                  {permission_required ? '승인 후 가입' : '바로 가입'}
+                </span>
               </div>
             </div>
           </div>
@@ -221,7 +270,7 @@ function Page({ params }: { params: { id: string } }) {
           {is_member ? (
             <div className="">
               <div className="font-semibold mb-[12px]">일정</div>
-              <Schedules />
+              <Schedules id={crewId} />
             </div>
           ) : (
             <button
@@ -233,6 +282,27 @@ function Page({ params }: { params: { id: string } }) {
             </button>
           )}
         </div>
+        {isModalOpen && (
+          <Modal
+            title={
+              is_crew_creator ? MODAL.deleteCrew.title : MODAL.reportCrew.title
+            }
+            content={
+              is_crew_creator
+                ? MODAL.deleteCrew.content
+                : MODAL.reportCrew.content
+            }
+            okContent={
+              is_crew_creator
+                ? MODAL.deleteCrew.okContent
+                : MODAL.reportCrew.okContent
+            }
+            onCancelClick={() => {
+              setisModalOpen(isClicked => !isClicked);
+            }}
+            onOkClick={is_crew_creator ? deleteCrew : reportCrew}
+          />
+        )}
       </div>
     </div>
   );

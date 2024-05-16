@@ -10,11 +10,16 @@ export interface CrewDetailProps {
   is_member: boolean;
   member_count: number;
   name: string;
-  region: string[];
+  regions: string[];
   status: string;
   tags: string[];
   updated_at: string;
   question: string;
+  is_crew_creator: boolean;
+  gender: string;
+  min_age: number;
+  max_age: number;
+  permission_required: boolean;
 }
 
 export interface CrewMembersProps {

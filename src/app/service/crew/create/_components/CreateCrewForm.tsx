@@ -1,6 +1,6 @@
 import { Inputs } from '@/types/crew/createFormSteps';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import SORT_BY from '@/constants/crew/sortBy';
 import useCrewListApi from '@/hooks/crew/useCrewList';
@@ -31,31 +31,29 @@ function CreateCrewForm({ crewDetail }: EditCrewProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { mutate: mutateMyList } = useCrewListApi.useGetCrewList(
-    2,
     SORT_BY.mylist,
   );
   const { mutate: mutatePopular } = useCrewListApi.useGetCrewList(
-    1,
     SORT_BY.popular,
   );
 
+  console.log(crewDetail);
   const methods = useForm<Inputs>({
     resolver: zodResolver(FormDataSchema),
-    defaultValues: crewDetail
-      ? {
-          name: crewDetail.name,
-          tags: crewDetail.tags,
-          regions: crewDetail.region,
-
-          // age: crewDetail.age,
-          // gender: crewDetail.gender,
-          // permission_required: crewDetail.permission_required,
-          description: crewDetail.description,
-        }
-      : {},
   });
 
-  const { handleSubmit, reset, getValues } = methods;
+  const { handleSubmit, reset, getValues, setValue } = methods;
+
+
+  // useEffect(() => {
+  //   if (crewDetail) {
+  //     Object.keys(crewDetail).forEach(key => {
+  //       setValue(key, crewDetail[key]);
+  //     });
+  //   }
+  // }, [crewDetail]);
+
+
 
   const processForm: SubmitHandler<Inputs> = async data => {
     const formData = GetCrewCreateData({

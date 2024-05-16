@@ -18,13 +18,14 @@ function Step0({ formMethods, setIsStepValid }: StepProps) {
   const [isCustomTag, setIsCustomTag] = useState<boolean>(false);
 
   const { register, setValue, getValues, watch } = formMethods;
+  console.log(getValues())
 
   useEffect(() => {
     const tags = getValues('tags');
     if (tags) {
       setSelectedValues(tags);
     }
-  }, []);
+  }, [getValues]);
 
   const handleTagClick = (option: string) => {
     const numSelected = selectedValues.length;

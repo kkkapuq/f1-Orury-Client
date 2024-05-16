@@ -1,7 +1,7 @@
 'use client';
 
 import { useCrewListState } from '@/store/crew/crewListStore';
-import TABS_CREW from '@/constants/crew/tabs';
+import { TABS_CREW } from '@/constants/crew/tabs';
 import Tabs from '@/app/_components/common/Tabs';
 import Header from '@/app/_components/common/Header';
 import HEADER from '@/constants/ui/common/header';

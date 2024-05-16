@@ -105,16 +105,27 @@ export const getPostListKey = (
 };
 
 export const getCrewListKey = (
-  categoryId: number,
-  pageIndex: number,
+  selectedOption: UseSortByStateProps['selectedOption'],
+  pageIndex?: number,
   previousPageData?: AxiosResponse<TResponse<CrewListData>>,
-  selectedOption?: UseSortByStateProps['selectedOption'],
 ) => {
   let endpoint: (pageNumber: number) => string =
     END_POINT.crewController.getListByRecommend;
+  switch (selectedOption.title) {
+    case '추천순':
+      endpoint = END_POINT.crewController.getListByRecommend;
+      break;
+    case '인기순':
+      endpoint = END_POINT.crewController.getListByRank;
+      break;
+    default:
+      endpoint = END_POINT.crewController.getListByRecommend;
+      break;
+  }
 
   const currentPage = previousPageData?.data.data.number;
 
+  // 첫 페이지가 아닌 마지막 페이지인 경우 null을 반환한다.
   if (
     previousPageData &&
     !previousPageData.data.data.first &&
@@ -123,51 +134,25 @@ export const getCrewListKey = (
     return null;
   }
 
-  switch (categoryId) {
-    case 1:
-      if (!previousPageData && selectedOption) {
-        switch (selectedOption.title) {
-          case '추천순':
-            endpoint = END_POINT.crewController.getListByRecommend;
-            break;
-          case '인기순':
-            endpoint = END_POINT.crewController.getListByRank;
-            break;
-          default:
-            endpoint = END_POINT.crewController.getListByRecommend;
-            break;
-        }
-      }
-
-      break;
-
-    case 2:
-      if (selectedOption) {
-        switch (selectedOption.title) {
-          case '참여 중':
-            endpoint = END_POINT.crewController.getMyCrews;
-            break;
-          case '참여 대기중':
-            //api 나오면 변경
-            endpoint = END_POINT.crewController.getMyCrews;
-        }
-      }
-
-      if (!previousPageData && pageIndex === 0) {
-        return endpoint(0);
-      }
-      break;
-
-    default:
-      return END_POINT.crewController.getMyCrews(pageIndex);
+  // 첫 페이지인 경우
+  if (!previousPageData && pageIndex === 0) {
+    return endpoint(0);
   }
 
-  if (endpoint) {
-    if (!previousPageData && pageIndex === 0) {
-      return endpoint(0);
-    }
+  return endpoint((currentPage as number) + 1);
+};
 
-    return endpoint((currentPage as number) + 1);
+export const getMyCrewListKey = (
+  selectedOption: UseSortByStateProps['selectedOption'],
+) => {
+  if (selectedOption) {
+    switch (selectedOption.title) {
+      case '참여 중':
+        return END_POINT.crewController.getMyCrews();
+        break;
+      case '참여 대기중':
+        return END_POINT.crewController.getMyApplications();
+    }
   }
 };
 

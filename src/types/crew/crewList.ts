@@ -36,3 +36,16 @@ export type CrewListData = {
   first: boolean;
   empty: boolean;
 };
+
+export type MyCrewListData = {
+  id: number;
+  capacity: number;
+  created_at: Date;
+  icon: string;
+  member_count: number;
+  name: string;
+  region: string[];
+  tags: string[];
+  updated_at: string;
+  user_images: string[];
+}[];

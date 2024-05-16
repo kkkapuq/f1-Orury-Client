@@ -1,12 +1,10 @@
 'use client';
 
 import clsx from 'clsx';
-import Modal from '@/app/_components/common/Modal';
 import HeaderProps from '@/types/ui/common/header';
 import deletePost from '@/app/service/community/[id]/api/deletePost';
 import usePostListApi from '@/hooks/community/usePostList';
 import Ellipsis from '@/app/_components/common/Ellipsis';
-import * as M from '@/app/_components/ui/menubars';
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -85,11 +83,6 @@ function Header({ ...props }: Partial<HeaderProps>) {
       <span className="font-medium">{title}</span>
       <div className="absolute right-4">
         {isEllipsis && <Ellipsis isPost onEditPost={onEdit} isMine />}
-        {isExit && (
-          <button type="button" onClick={onExit}>
-            <X />
-          </button>
-        )}
         {categoryId !== 3 && isSearching && (
           <button type="button" onClick={onSearch}>
             <Search color={COLOR.primary} />

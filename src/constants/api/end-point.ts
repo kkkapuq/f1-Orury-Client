@@ -186,13 +186,25 @@ export const END_POINT = {
     getListByRecommend: (page: number) => `/crews/recommend?page=${page}`,
 
     // GET: 크루 랭킹순 조회
-    getListByRank: (page: number) => `/crews/rank?page=${page}`,
+    getListByRank: (page: number) => `/crews/popular?page=${page}`,
 
-    // GET: 내 크루 조회
-    getMyCrews: (page: number) => `/crews/mycrew?page=${page}`,
+    // GET: 내 크루 목록 조회
+    getMyCrews: () => `/crews/mycrew`,
 
-    // GET: 크루 멤버 조회 
-    getCrewMembers : (crewId: number) => `/crews/${crewId}/members`,
+    // GET: 내 크루 가입 신청 목록 조회
+    getMyApplications: () => `/crews/myApplications`,
+
+    // DELETE: 내 크루 가입 신청 철회
+    deleteMyApplication: (crewId: number) => `/crews/${crewId}/withdrawals`,
+
+     // DELETE: 내 크루 가입 신청 철회
+     deleteMyCrew: (crewId: number) => `/crews/${crewId}`,
+
+    // GET: 크루 멤버 조회
+    getCrewMembers: (crewId: number) => `/crews/${crewId}/members`,
+
+    // GET: 크루 지원자 조회
+    getCrewApplicants: (crewId: number) => `/crews/${crewId}/applicants`,
   },
   notificationController: {
     // DEFAULT

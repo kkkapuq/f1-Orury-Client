@@ -18,10 +18,16 @@ import SORT_BY from '@/constants/crew/sortBy';
 function CrewList() {
   const { categoryId } = useCrewListState();
   const { selectedOption, setSelectedOption } = useSortByState();
-  const { data, size, setSize, isValidating, isLoading } = useCrewListApi.useGetCrewList(
-    categoryId,
-    selectedOption,
-  );
+  const {
+    data: crewData,
+    size,
+    setSize,
+    isValidating: crewIsValidating,
+    isLoading: crewIsLoading,
+  } = useCrewListApi.useGetCrewList(selectedOption);
+
+  const { data: myCrewData, isLoading: myCrewIsLoading } =
+    useCrewListApi.useGetMyCrewList(selectedOption);
 
   useEffect(() => {
     if (categoryId === 1) {
@@ -32,29 +38,39 @@ function CrewList() {
     }
   }, [categoryId]);
 
-  const crewList = data ? data.flatMap(page => page.data.data.content) : [];
+  console.log(crewData);
+  const crewList = crewData
+    ? crewData.flatMap(page => page?.data.data.content ?? [])
+    : [];
+  const myCrewList = myCrewData ? myCrewData.data.data : [];
 
   const bottomRef = useIntersect(() => {
-    if (!isValidating && data && !data[data.length - 1]?.data.data.last) {
+    if (
+      !crewIsValidating &&
+      crewData &&
+      !crewData[crewData.length - 1]?.data.data.last
+    ) {
       setSize(size + 1);
     }
   });
 
   let renderedComponent;
-  if (isLoading) {
+  if (crewIsLoading) {
     renderedComponent = <PostListSkeleton />;
   } else if (categoryId === 1) {
     renderedComponent = (
       <>
         <SortOptions />
-        {crewList?.map(crew => <CrewListItem key={crew.id} {...crew} />)}
+        {crewList.length > 0
+          ? crewList.map(crew => <CrewListItem key={crew.id} {...crew} />)
+          : null}
       </>
     );
   } else if (categoryId === 2) {
     renderedComponent = (
       <>
         <SortStatus />
-        {crewList?.map(crew => <MyCrewListItem key={crew.id} {...crew} />)}
+        {myCrewList?.map(crew => <MyCrewListItem key={crew.id} {...crew} />)}
       </>
     );
   } else {
@@ -69,7 +85,7 @@ function CrewList() {
           <NotSearched content="크루가 존재하지 않습니다." />
         ) : null}
       </ul>
-      <div ref={bottomRef} />
+      {categoryId === 1 ? <div ref={bottomRef} /> : null}
     </div>
   );
 }

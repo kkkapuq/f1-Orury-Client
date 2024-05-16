@@ -7,8 +7,16 @@ import { UseCrewListItemProps } from '@/types/crew/crewList';
 import clsx from 'clsx';
 import getTimeDiff from '@/utils/getTimeDiff';
 import { MapPin } from 'lucide-react';
+import { useSortByState } from '@/store/crew/sortsStore';
+import crewApi from '../[id]/api/crew';
+
+import { useState } from 'react';
+import Modal from '@/app/_components/common/Modal';
+import { MODAL } from '@/constants/ui/common/modal';
+import { mutate } from 'swr';
 
 function MyCrewListItem({ ...props }: UseCrewListItemProps) {
+  const [isModalOpen, setisModalOpen] = useState(false);
   const {
     id,
     name,
@@ -20,12 +28,21 @@ function MyCrewListItem({ ...props }: UseCrewListItemProps) {
     user_images,
   } = props;
 
+  const { selectedOption } = useSortByState();
+
+  const clickHandler = () => {
+    setisModalOpen(isClicked => !isClicked);
+  };
+
+  const handleWithdraw = async () => {
+    console.log('가입취소');
+    await crewApi.WithdrawCrew(id);
+    // mutate()
+  };
+
   return (
-    <li className="list-none">
-      <Link
-        href={`/service/crew/${id}`}
-        className="flex justify-between h-fit w-full my-[16px] rounded-[10px] border border-[#EFEFEF] p-[12px] overflow-hidden mx-auto bg-white gap-[10px]"
-      >
+    <li className="list-none justify-between h-fit w-full my-[16px] rounded-[10px] border border-[#EFEFEF] p-[12px] overflow-hidden mx-auto bg-white">
+      <Link href={`/service/crew/${id}`} className="flex  gap-[10px]">
         {icon && (
           <div className="w-[100px] min-h-full relative">
             <Image
@@ -43,7 +60,7 @@ function MyCrewListItem({ ...props }: UseCrewListItemProps) {
           <div className="flex gap-[4px] text-violet-500 ">
             <MapPin className="w-4 h-4" />
             {region &&
-              region.map((item) => (
+              region.map(item => (
                 <span key={item} className="text-xs font-medium text-[14px]">
                   {item}
                 </span>
@@ -82,6 +99,23 @@ function MyCrewListItem({ ...props }: UseCrewListItemProps) {
           </div>
         </div>
       </Link>
+      {selectedOption.title === '참여 대기중' ? (
+        <button
+          className="w-full h-10 rounded-[10px] border border-gray-200 mt-[12px] text-[#E53A35] text-xs"
+          onClick={clickHandler}
+        >
+          가입 신청 철회
+        </button>
+      ) : null}
+      {isModalOpen && (
+        <Modal
+          title={MODAL.withdrawCrew.title}
+          content={MODAL.withdrawCrew.content}
+          okContent={MODAL.withdrawCrew.okContent}
+          onCancelClick={clickHandler}
+          onOkClick={handleWithdraw}
+        />
+      )}
     </li>
   );
 }

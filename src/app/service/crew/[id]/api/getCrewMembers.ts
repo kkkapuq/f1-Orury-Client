@@ -5,7 +5,7 @@ import { CrewMembersProps } from '@/types/crew/crew';
 
 import CustomError from '@/error/CustomError';
 
-const getCrewMembers = async (id: number) => {
+export const getCrewMembers = async (id: number) => {
   try {
     const { data: crewMembers } = await axiosInstance<
       TResponse<CrewMembersProps[]>
@@ -19,4 +19,16 @@ const getCrewMembers = async (id: number) => {
   }
 };
 
-export default getCrewMembers;
+export const getCrewApplicants = async (id: number) => {
+  try {
+    const { data: crewMembers } = await axiosInstance<
+      TResponse<CrewMembersProps[]>
+    >(END_POINT.crewController.getCrewApplicants(id));
+
+    return crewMembers.data;
+  } catch (error: unknown) {
+    if (error instanceof CustomError) {
+      throw new Error(error.message);
+    }
+  }
+};

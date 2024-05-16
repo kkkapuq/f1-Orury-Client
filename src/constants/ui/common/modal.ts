@@ -19,4 +19,19 @@ export const MODAL = {
       okContent: '삭제',
     },
   },
+  withdrawCrew: {
+    title: '가입 신청 철회',
+    content: `크루 가입 신청을 철회하시겠습니까? ${EOL}작성했던 답변 내용은 복구할 수 없습니다.`,
+    okContent: '철회',
+  },
+  deleteCrew: {
+    title: '크루 삭제',
+    content: `크루를 삭제하시겠습니까? ${EOL}크루 멤버 등 삭제된 정보는 복구할 수 없습니다.`,
+    okContent: '삭제',
+  },
+  reportCrew: {
+    title: '크루 신고',
+    content: `크루를 신고하시겠습니까? `,
+    okContent: '신고',
+  },
 } as const;
